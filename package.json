@@ -1,0 +1,21 @@
+{
+  "name": "skynet-studios",
+  "version": "1.0.0",
+  "description": "Skynet Studios - Futuristic Web Development & Full-Stack Creative Agency",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 4321",
+    "serve": "npx -y serve . -p 4321",
+    "dev": "python3 -m http.server 4321"
+  },
+  "keywords": [
+    "creative-agency",
+    "portfolio",
+    "web-development",
+    "vanilla-js",
+    "modern-css",
+    "full-stack"
+  ],
+  "author": "Skynet Studios",
+  "license": "MIT"
+}

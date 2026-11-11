@@ -1,0 +1,1223 @@
+/**
+ * SKYNET STUDIOS // CLIENT ENGINE
+ * Ultra-Interactive Vanilla JS Core (Light Theme Edition)
+ * Features: Card Spotlight Tracking, 3D Tilt Physics, Magnetic CTAs, 
+ * Live Filter Tabs, Native Modal, Dynamic Currency Toggle, 
+ * Service Pre-Selection, Estimator & Form Handler.
+ * (Custom cursor follower completely removed; system cursor restored)
+ */
+
+document.addEventListener('DOMContentLoaded', () => {
+  'use strict';
+
+  // =========================================================================
+  // 1. SPOTLIGHT EFFECT ON CARDS (Mouse-Tracking Radial Illumination)
+  // =========================================================================
+  const spotlightCards = document.querySelectorAll('.spotlight-card');
+  spotlightCards.forEach((card) => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+    });
+  });
+
+  // =========================================================================
+  // 2. CARD HOVER & ACTIVE INTERACTIONS
+  // (Shaky 3D tilt script removed. Cards remain flat, stable, and elevate
+  // with smooth CSS vertical lift translateY(-8px) and tactile active press)
+  // =========================================================================
+
+  // =========================================================================
+  // 3. MAGNETIC HOVER PULL PHYSICS FOR PRIMARY CTAS
+  // =========================================================================
+  const magneticButtons = document.querySelectorAll('.btn-magnetic');
+  magneticButtons.forEach((btn) => {
+    btn.addEventListener('mousemove', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      btn.style.transform = `translate(${x * 0.28}px, ${y * 0.28}px)`;
+    });
+
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform = 'translate(0px, 0px)';
+    });
+  });
+
+  // =========================================================================
+  // 4. STICKY NAVBAR SCROLL STATE & MOBILE DRAWER
+  // =========================================================================
+  const mainHeader = document.getElementById('mainHeader');
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const mobileDrawer = document.getElementById('mobileDrawer');
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 40) {
+      mainHeader.classList.add('scrolled');
+    } else {
+      mainHeader.classList.remove('scrolled');
+    }
+  });
+
+  if (mobileMenuBtn && mobileDrawer) {
+    mobileMenuBtn.addEventListener('click', () => {
+      const isOpen = mobileDrawer.classList.toggle('open');
+      mobileMenuBtn.classList.toggle('active', isOpen);
+      mobileMenuBtn.setAttribute('aria-expanded', isOpen);
+    });
+
+    // Close mobile drawer upon clicking any link inside it
+    mobileDrawer.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        mobileDrawer.classList.remove('open');
+        mobileMenuBtn.classList.remove('active');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
+  // =========================================================================
+  // 5. THIN OFFER NEWS TICKER INTERACTION
+  // =========================================================================
+  const tickerItems = document.querySelectorAll('.ticker-item');
+  tickerItems.forEach((item) => {
+    item.addEventListener('click', () => {
+      const offer = item.getAttribute('data-offer');
+      let targetService = 'Landing Page';
+      let promoNote = '';
+
+      if (offer === 'SHOPIFY20') {
+        targetService = 'Shopify Store';
+        promoNote = '[PROMO CODE: SHOPIFY20 APPLIED - Flat 20% Discount Activated]\n';
+      } else if (offer === 'LANDING5D') {
+        targetService = 'Landing Page';
+        promoNote = '[5-DAY SPRINT PRIORITY REQUESTED]\n';
+      } else if (offer === 'AIAPP') {
+        targetService = 'Full-Stack Web App';
+        promoNote = '[FULL-STACK + AI INTEGRATION INQUIRY]\n';
+      } else if (offer === 'AUDITFREE') {
+        targetService = 'Redesign / Other';
+        promoNote = '[FREE UI/UX & SPEED AUDIT COMPLIMENTARY REQUEST]\n';
+      }
+
+      // Pre-select service in form and scroll
+      preselectServiceInForm(targetService, promoNote);
+    });
+  });
+
+  // =========================================================================
+  // =========================================================================
+  // 6. PORTFOLIO DYNAMIC STORAGE ARCHITECTURE & EMPTY STATE RENDERING
+  // =========================================================================
+  const filterTabs = document.querySelectorAll('.filter-tab');
+  const projectsGrid = document.getElementById('projectsGrid');
+  const showMoreProjectsBtn = document.getElementById('showMoreProjectsBtn');
+  const portfolioShowMoreWrapper = document.getElementById('portfolioShowMoreWrapper');
+  const portfolioEmptyState = document.getElementById('portfolioEmptyState');
+  let isPortfolioExpanded = false;
+
+  const PORTFOLIO_STORAGE_KEY = 'skynet_portfolio_projects';
+
+  function getStoredProjects() {
+    try {
+      const data = localStorage.getItem(PORTFOLIO_STORAGE_KEY);
+      return data ? JSON.parse(data) : [];
+    } catch (err) {
+      console.warn('Could not read portfolio projects from localStorage:', err);
+      return [];
+    }
+  }
+
+  function saveStoredProjects(projects) {
+    try {
+      localStorage.setItem(PORTFOLIO_STORAGE_KEY, JSON.stringify(projects));
+    } catch (err) {
+      console.warn('Could not save portfolio projects to localStorage:', err);
+    }
+  }
+
+  function createProjectCardElement(project, index, isAllFilter, isExpanded) {
+    const card = document.createElement('article');
+    card.className = 'project-card spotlight-card';
+    card.setAttribute('data-category', project.category);
+    card.setAttribute('data-id', project.id);
+
+    if (isAllFilter && !isExpanded && index >= 2) {
+      card.classList.add('hidden');
+    }
+
+    const catLabels = {
+      landing: 'LANDING PAGE // 3D INTERACTIVE',
+      fullstack: 'FULL-STACK WEB APP // BESPOKE',
+      shopify: 'SHOPIFY & E-COMMERCE // CUSTOM THEME',
+      ongoing: 'PROJECTS ON-GOING // ACTIVE SPRINT'
+    };
+    const catLabelText = catLabels[project.category] || 'PROJECT DELIVERABLE';
+
+    const badgeClasses = {
+      landing: 'badge-cyan',
+      fullstack: 'badge-violet',
+      shopify: 'badge-green',
+      ongoing: 'badge-orange'
+    };
+    const badgeClass = badgeClasses[project.category] || 'badge-cyan';
+
+    const visualClass = project.category === 'landing' ? 'mockup-landing' :
+                        project.category === 'fullstack' ? 'mockup-cloud' :
+                        project.category === 'shopify' ? 'mockup-store' : 'mockup-dashboard';
+
+    card.innerHTML = `
+      <div class="project-image-box">
+        <div class="project-visual-mockup" style="background: linear-gradient(135deg, rgba(0,210,255,0.08), rgba(123,44,191,0.08));">
+          <div class="mockup-screen">
+            <div class="mockup-header-bar">
+              <span class="mock-dot red"></span>
+              <span class="mock-dot yellow"></span>
+              <span class="mock-dot green"></span>
+              <span class="mock-url">${escapeHTML(project.domain || 'project.skynet.dev')}</span>
+            </div>
+            <div class="mockup-body ${visualClass}" style="display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:16px;">
+              <div class="mock-badge" style="background:rgba(0,180,216,0.15); color:#0077B6; padding:3px 10px; border-radius:9999px; font-size:0.7rem; font-weight:700; margin-bottom:8px;">
+                ${project.category === 'ongoing' ? 'ACTIVE BUILD' : 'PRODUCTION READY'}
+              </div>
+              <div class="mock-title" style="font-size:1.05rem; font-weight:800; color:#0F172A; max-width:240px; line-height:1.2;">
+                ${escapeHTML(project.name)}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="project-overlay">
+          <button class="btn-case-study" type="button" data-project="${escapeHTML(project.id)}">View Project</button>
+        </div>
+        <div class="project-metric-badge ${badgeClass}">
+          ${escapeHTML(project.metric || '🚀 Production Ready')}
+        </div>
+      </div>
+      <div class="project-info">
+        <div class="project-meta-top">
+          <span class="project-category">${catLabelText}</span>
+          <span class="project-year">${escapeHTML(project.finishTime || '2026')}</span>
+        </div>
+        <h3 class="project-name">${escapeHTML(project.name)}</h3>
+        <p class="project-summary">${escapeHTML(project.summary)}</p>
+        <div class="project-tech-tags">
+          ${(project.techTags || []).map(tag => `<span class="tech-tag">${escapeHTML(tag)}</span>`).join('')}
+        </div>
+      </div>
+    `;
+
+    // Spotlight cursor tracking
+    card.addEventListener('mousemove', (ev) => {
+      const rect = card.getBoundingClientRect();
+      const x = ev.clientX - rect.left;
+      const y = ev.clientY - rect.top;
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+    });
+
+    return card;
+  }
+
+  function renderPortfolio(filterVal) {
+    const activeTab = document.querySelector('.filter-tab.active');
+    const currentFilter = filterVal || (activeTab ? activeTab.getAttribute('data-filter') : 'all');
+    const projects = getStoredProjects();
+
+    // 1. Dynamic category counts
+    const countAllEl = document.getElementById('countAll');
+    const countLandingEl = document.getElementById('countLanding');
+    const countFullstackEl = document.getElementById('countFullstack');
+    const countShopifyEl = document.getElementById('countShopify');
+    const countOngoingEl = document.getElementById('countOngoing');
+
+    const landingCount = projects.filter(p => p.category === 'landing').length;
+    const fullstackCount = projects.filter(p => p.category === 'fullstack').length;
+    const shopifyCount = projects.filter(p => p.category === 'shopify').length;
+    const ongoingCount = projects.filter(p => p.category === 'ongoing').length;
+
+    if (countAllEl) countAllEl.textContent = `(${projects.length})`;
+    if (countLandingEl) countLandingEl.textContent = `(${landingCount})`;
+    if (countFullstackEl) countFullstackEl.textContent = `(${fullstackCount})`;
+    if (countShopifyEl) countShopifyEl.textContent = `(${shopifyCount})`;
+    if (countOngoingEl) countOngoingEl.textContent = `(${ongoingCount})`;
+
+    if (!projectsGrid) return;
+
+    // 2. Empty state check (when there are 0 projects in storage)
+    if (projects.length === 0) {
+      if (portfolioEmptyState) {
+        portfolioEmptyState.classList.remove('hidden');
+        portfolioEmptyState.style.display = 'flex';
+      }
+      projectsGrid.innerHTML = '';
+      if (portfolioShowMoreWrapper) {
+        portfolioShowMoreWrapper.style.display = 'none';
+      }
+      return;
+    }
+
+    // Projects exist: hide the empty state placeholder
+    if (portfolioEmptyState) {
+      portfolioEmptyState.classList.add('hidden');
+      portfolioEmptyState.style.display = 'none';
+    }
+
+    // 3. Filter projects matching the active tab
+    const matching = (currentFilter === 'all')
+      ? projects
+      : projects.filter(p => p.category === currentFilter);
+
+    projectsGrid.innerHTML = '';
+
+    if (matching.length === 0) {
+      const noMatchMsg = document.createElement('div');
+      noMatchMsg.className = 'portfolio-category-empty';
+      noMatchMsg.style.cssText = 'grid-column: 1 / -1; text-align: center; padding: 48px 24px; color: #64748B; font-family: var(--font-sans); font-size: 1rem; font-weight: 500; background: rgba(255,255,255,0.7); border-radius: 16px; border: 1px dashed rgba(203,213,225,0.8);';
+      noMatchMsg.innerHTML = `No projects currently filed under this category. Click <strong>+ Add</strong> above to add one.`;
+      projectsGrid.appendChild(noMatchMsg);
+      if (portfolioShowMoreWrapper) portfolioShowMoreWrapper.style.display = 'none';
+      return;
+    }
+
+    const isAll = (currentFilter === 'all');
+    matching.forEach((proj, idx) => {
+      const cardEl = createProjectCardElement(proj, idx, isAll, isPortfolioExpanded);
+      cardEl.style.animation = `fadeUp 0.35s ease forwards ${idx * 0.05}s`;
+      projectsGrid.appendChild(cardEl);
+    });
+
+    // 4. Update 'Show More' visibility
+    if (portfolioShowMoreWrapper) {
+      if (isAll && !isPortfolioExpanded && matching.length > 2) {
+        portfolioShowMoreWrapper.style.display = 'flex';
+      } else {
+        portfolioShowMoreWrapper.style.display = 'none';
+      }
+    }
+  }
+
+  filterTabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      filterTabs.forEach((t) => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+
+      const filterVal = tab.getAttribute('data-filter');
+      renderPortfolio(filterVal);
+    });
+  });
+
+  if (showMoreProjectsBtn) {
+    showMoreProjectsBtn.addEventListener('click', () => {
+      isPortfolioExpanded = true;
+      const activeTab = document.querySelector('.filter-tab.active');
+      const activeFilter = activeTab ? activeTab.getAttribute('data-filter') : 'all';
+      renderPortfolio(activeFilter);
+      if (portfolioShowMoreWrapper) {
+        portfolioShowMoreWrapper.style.display = 'none';
+      }
+    });
+  }
+
+  // Initial render from localStorage (displays empty state if 0 projects)
+  renderPortfolio('all');
+
+  // =========================================================================
+  // 6B. '+ ADD' PROJECT / ONGOING BUILD MODAL & FORM HANDLER
+  // =========================================================================
+  const addProjectModal = document.getElementById('addProjectModal');
+  const openAddProjectModalBtn = document.getElementById('openAddProjectModalBtn');
+  const closeAddProjectBtn = document.getElementById('closeAddProjectBtn');
+  const cancelAddProjectBtn = document.getElementById('cancelAddProjectBtn');
+  const addProjectForm = document.getElementById('addProjectForm');
+
+  function openAddModal() {
+    if (addProjectModal) {
+      if (typeof addProjectModal.showModal === 'function') {
+        addProjectModal.showModal();
+      } else {
+        addProjectModal.setAttribute('open', '');
+      }
+      document.body.style.overflow = 'hidden';
+      const firstInput = document.getElementById('newProjectName');
+      if (firstInput) setTimeout(() => firstInput.focus(), 80);
+    }
+  }
+
+  function closeAddModal() {
+    if (addProjectModal) {
+      if (typeof addProjectModal.close === 'function') {
+        addProjectModal.close();
+      } else {
+        addProjectModal.removeAttribute('open');
+      }
+      document.body.style.overflow = '';
+      if (addProjectForm) addProjectForm.reset();
+    }
+  }
+
+  const emptyStateAddBtn = document.getElementById('emptyStateAddBtn');
+  if (openAddProjectModalBtn) openAddProjectModalBtn.addEventListener('click', openAddModal);
+  if (emptyStateAddBtn) emptyStateAddBtn.addEventListener('click', openAddModal);
+  if (closeAddProjectBtn) closeAddProjectBtn.addEventListener('click', closeAddModal);
+  if (cancelAddProjectBtn) cancelAddProjectBtn.addEventListener('click', closeAddModal);
+
+  // Close on backdrop click
+  if (addProjectModal) {
+    addProjectModal.addEventListener('click', (e) => {
+      const rect = addProjectModal.getBoundingClientRect();
+      const isInDialog = (
+        rect.top <= e.clientY &&
+        e.clientY <= rect.top + rect.height &&
+        rect.left <= e.clientX &&
+        e.clientX <= rect.left + rect.width
+      );
+      if (!isInDialog) {
+        closeAddModal();
+      }
+    });
+  }
+
+  function escapeHTML(str) {
+    return str.replace(/[&<>'"]/g, 
+      tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+    );
+  }
+
+  function showNotificationToast(msg) {
+    let toast = document.getElementById('skynetToast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'skynetToast';
+      toast.style.cssText = `
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: #0F172A;
+        color: #FFFFFF;
+        padding: 14px 24px;
+        border-radius: 9999px;
+        font-family: var(--font-sans);
+        font-size: 0.9rem;
+        font-weight: 600;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        z-index: 99999;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transform: translateY(100px);
+        opacity: 0;
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+      `;
+      document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.style.transform = 'translateY(0)';
+    toast.style.opacity = '1';
+
+    setTimeout(() => {
+      toast.style.transform = 'translateY(100px)';
+      toast.style.opacity = '0';
+    }, 3500);
+  }
+
+  if (addProjectForm) {
+    addProjectForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById('newProjectName').value.trim();
+      const category = document.getElementById('newProjectCategory').value;
+      const domain = document.getElementById('newProjectDomain').value.trim() || 'project.skynet.dev';
+      const finishTime = document.getElementById('newProjectFinishTime').value.trim() || 'Active Sprint';
+      const metric = document.getElementById('newProjectMetric').value.trim() || '🚀 In Production';
+      const techInput = document.getElementById('newProjectTech').value.trim();
+      const summary = document.getElementById('newProjectSummary').value.trim();
+
+      if (!name || !summary) {
+        alert('Please provide at least a project title and description.');
+        return;
+      }
+
+      const techTags = techInput
+        ? techInput.split(',').map(t => t.trim()).filter(Boolean)
+        : ['Next.js 15', 'Full-Stack', 'Tailwind'];
+
+      const newProject = {
+        id: `project-${Date.now()}`,
+        name,
+        category,
+        domain,
+        finishTime,
+        metric,
+        techTags,
+        summary,
+        createdAt: Date.now()
+      };
+
+      // Save to localStorage array
+      const projects = getStoredProjects();
+      projects.unshift(newProject);
+      saveStoredProjects(projects);
+
+      // Switch active tab indicator to the newly created project's category
+      filterTabs.forEach((t) => {
+        const matches = (t.getAttribute('data-filter') === category);
+        t.classList.toggle('active', matches);
+        t.setAttribute('aria-selected', matches ? 'true' : 'false');
+      });
+
+      // Immediately render new project into grid & hide empty state
+      renderPortfolio(category);
+
+      closeAddModal();
+      showNotificationToast(`✓ "${name}" published to archive successfully!`);
+    });
+  }
+
+  // =========================================================================
+  // 7. CASE STUDY MODAL DIALOG
+  // =========================================================================
+  const modal = document.getElementById('caseStudyModal');
+  const closeModalBtn = document.getElementById('closeModalBtn');
+  const modalDismissBtn = document.getElementById('modalDismissBtn');
+  const modalHireBtn = document.getElementById('modalHireBtn');
+
+  // Case Studies Database
+  const caseStudiesData = {
+    hyperion: {
+      category: 'LANDING PAGE // 3D INTERACTIVE',
+      metric: '+215% Conversion Boost',
+      title: 'Hyperion AI — Generative Cloud Launch',
+      lead: 'Designing a modern product launch site that converted over 18,000 waitlist users in 72 hours.',
+      challenge: 'Hyperion needed to stand out in a saturated AI SaaS market with an experience that demonstrated their algorithmic speed before users even signed up.',
+      solution: 'Constructed an ultra-lightweight Next.js 15 site with custom Three.js shader nodes, dynamic scroll-linked typography, and 0.28s LCP.',
+      stats: [
+        { num: '18.4K', lbl: 'Waitlist Signups' },
+        { num: '100', lbl: 'Performance Score' },
+        { num: '0.28s', lbl: 'LCP Load Time' }
+      ],
+      tech: ['Next.js 15', 'Three.js', 'GSAP', 'Tailwind CSS', 'Vercel Edge']
+    },
+    strataflow: {
+      category: 'FULL-STACK APP // SAAS',
+      metric: '99.99% Uptime SLA',
+      title: 'StrataFlow — Real-Time Liquidity Hub',
+      lead: 'Building a multi-tenant institutional FinTech dashboard handling millions in weekly transactional telemetry.',
+      challenge: 'Handling real-time WebSocket market streams without frontend frame drops or UI latency for enterprise traders.',
+      solution: 'Engineered a modular React + Node.js architecture with PostgreSQL and Redis caching, delivering 12ms round-trip updates.',
+      stats: [
+        { num: '$14M+', lbl: 'Volume Processed' },
+        { num: '12ms', lbl: 'Average Latency' },
+        { num: '99.99%', lbl: 'Uptime Reliability' }
+      ],
+      tech: ['React', 'Node.js', 'PostgreSQL', 'Redis', 'WebSockets', 'Stripe']
+    },
+    lumina: {
+      category: 'SHOPIFY & E-COMMERCE // CUSTOM THEME',
+      metric: '+182% ROAS Uplift',
+      title: 'Lumina Apparel — High-Fashion Shopify 2.0',
+      lead: 'Transforming a sluggish legacy e-commerce store into a lightning-fast custom Liquid showcase.',
+      challenge: 'High cart abandonment (72%) and slow collection filtering leading to lost paid ad revenue.',
+      solution: 'Built custom Shopify Liquid 2.0 theme with 1-click slide-cart upsells, sticky buy CTA, and sub-second instant search.',
+      stats: [
+        { num: '+182%', lbl: 'ROAS Improvement' },
+        { num: '3.8%', lbl: 'Conversion Rate' },
+        { num: '0.4s', lbl: 'Mobile Filter Speed' }
+      ],
+      tech: ['Shopify Liquid', 'Vanilla JS', 'Tailwind CSS', 'Klaviyo', 'Recharge API']
+    },
+    synapse: {
+      category: 'FULL-STACK APP // DEVTOOL PORTAL',
+      metric: '12ms Global Latency',
+      title: 'Synapse Cloud — Edge Deployment Portal',
+      lead: 'Empowering engineering teams with instant micro-cluster provisioning and continuous delivery pipelines.',
+      challenge: 'Complex serverless management requiring an intuitive, accessible dashboard with real-time log tailing.',
+      solution: 'Delivered an intuitive dashboard with FastAPI backend, automated TLS certificates, and live SSE terminal streaming.',
+      stats: [
+        { num: '24K+', lbl: 'Active Clusters' },
+        { num: '12ms', lbl: 'P99 Edge Latency' },
+        { num: '4.9/5', lbl: 'Dev Satisfaction' }
+      ],
+      tech: ['Next.js', 'FastAPI', 'Docker', 'Redis', 'Server-Sent Events']
+    },
+    vortex: {
+      category: 'LANDING PAGE // HARDWARE LAUNCH',
+      metric: '100/100 Lighthouse',
+      title: 'Vortex Sound — Spatial Audio Hardware',
+      lead: 'A sensory digital experience mimicking 360-degree spatial audio acoustics directly through web speakers.',
+      challenge: 'Showcasing physical hardware audio technology online with high audio fidelity and smooth visual rendering.',
+      solution: 'Implemented Web Audio API frequency analyzers coupled with interactive WebGL particle waves that pulse to sound.',
+      stats: [
+        { num: '$1.4M', lbl: 'Pre-Order GMV' },
+        { num: '100/100', lbl: 'Lighthouse Score' },
+        { num: '3.4m', lbl: 'Avg. Time on Page' }
+      ],
+      tech: ['HTML5', 'Web Audio API', 'WebGL', 'CSS Grid', 'Stripe']
+    },
+    chronos: {
+      category: 'SHOPIFY & E-COMMERCE // LUXURY D2C',
+      metric: '$2.8M First Month GMV',
+      title: 'Chronos Horology — Swiss Watchmaker Store',
+      lead: 'Crafting an ultra-luxury digital showroom with 360-degree 3D watch customizers and private concierge booking.',
+      challenge: 'High-ticket items ($4,000+) requiring trust, immaculate presentation, and bespoke concierge integration.',
+      solution: 'Developed an exclusive Shopify Plus experience with WebGL model inspection, high-security escrow, and VIP appointment booking.',
+      stats: [
+        { num: '$2.8M', lbl: 'First Month GMV' },
+        { num: '$4,250', lbl: 'Average Order Value' },
+        { num: '100%', lbl: 'Zero Security Incidents' }
+      ],
+      tech: ['Shopify Plus', 'Three.js', 'GraphQL API', 'Calendly API', 'Tailwind']
+    }
+  };
+
+  // Open Modal logic (Delegated for dynamically rendered cards)
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.btn-case-study');
+    if (!btn) return;
+    e.stopPropagation();
+
+    const projId = btn.getAttribute('data-project');
+    const stored = getStoredProjects();
+    const customProject = stored.find(p => p.id === projId);
+
+    let data;
+    if (customProject) {
+      data = {
+        category: (customProject.category || 'PROJECT').toUpperCase() + ' // PRODUCTION BUILD',
+        metric: customProject.metric || '🚀 Production Ready',
+        title: customProject.name,
+        lead: customProject.summary,
+        challenge: 'Architected and engineered strictly to client deliverables, high-converting UX benchmarks, and sub-second performance standards.',
+        solution: customProject.summary,
+        stats: [
+          { num: '100%', lbl: 'Bespoke Code' },
+          { num: '<0.8s', lbl: 'Page Load' },
+          { num: '99.9%', lbl: 'Reliability' }
+        ],
+        tech: customProject.techTags && customProject.techTags.length ? customProject.techTags : ['Next.js 15', 'Full-Stack']
+      };
+    } else {
+      data = caseStudiesData[projId] || caseStudiesData.hyperion;
+    }
+
+    const catEl = document.getElementById('modalCategory');
+    const metricEl = document.getElementById('modalMetric');
+    const titleEl = document.getElementById('modalTitle');
+    const leadEl = document.getElementById('modalLead');
+    const challEl = document.getElementById('modalChallenge');
+    const solEl = document.getElementById('modalSolution');
+
+    if (catEl) catEl.textContent = data.category;
+    if (metricEl) metricEl.textContent = data.metric;
+    if (titleEl) titleEl.textContent = data.title;
+    if (leadEl) leadEl.textContent = data.lead;
+    if (challEl) challEl.textContent = data.challenge;
+    if (solEl) solEl.textContent = data.solution;
+
+    // Stats
+    const statsRow = document.getElementById('modalStatsRow');
+    if (statsRow) {
+      statsRow.innerHTML = data.stats.map(s => `
+        <div class="m-stat-pill">
+          <div class="m-stat-num">${s.num}</div>
+          <div class="m-stat-lbl">${s.lbl}</div>
+        </div>
+      `).join('');
+    }
+
+    // Tech tags
+    const techBox = document.getElementById('modalTechTags');
+    if (techBox) {
+      techBox.innerHTML = data.tech.map(t => `<span class="tech-tag">${t}</span>`).join('');
+    }
+
+    // Stage visual preview
+    const stage = document.getElementById('modalPreviewStage');
+    if (stage) {
+      stage.innerHTML = `
+        <div style="text-align: center; padding: 20px;">
+          <div style="font-family: var(--font-mono); color: #0077B6; font-size: 0.82rem; margin-bottom: 8px; font-weight: 700;">
+            // VERIFIED PRODUCTION DEPLOYMENT
+          </div>
+          <h4 style="font-size: 1.3rem; margin-bottom: 6px; color: #0F172A;">${data.title}</h4>
+          <span style="display: inline-block; padding: 4px 12px; background: rgba(0, 180, 216, 0.12); border: 1px solid rgba(0, 180, 216, 0.3); border-radius: 9999px; font-size: 0.75rem; font-family: var(--font-mono); color: #0077B6; font-weight: 700;">
+            Live Client Environment Verified
+          </span>
+        </div>
+      `;
+    }
+
+    if (modal && typeof modal.showModal === 'function') {
+      modal.showModal();
+      document.body.style.overflow = 'hidden';
+    }
+  });
+
+  function closeModal() {
+    if (modal && modal.open) {
+      modal.close();
+      document.body.style.overflow = '';
+    }
+  }
+
+  if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+  if (modalDismissBtn) modalDismissBtn.addEventListener('click', closeModal);
+  if (modalHireBtn) {
+    modalHireBtn.addEventListener('click', () => {
+      closeModal();
+    });
+  }
+
+  // Light dismiss on backdrop click
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      const rect = modal.getBoundingClientRect();
+      const isInDialog = (
+        rect.top <= e.clientY &&
+        e.clientY <= rect.top + rect.height &&
+        rect.left <= e.clientX &&
+        e.clientX <= rect.left + rect.width
+      );
+      if (!isInDialog) {
+        closeModal();
+      }
+    });
+  }
+
+  // =========================================================================
+  // 8. DEFAULT CURRENCY (INDIAN RUPEES ₹)
+  // =========================================================================
+  document.querySelectorAll('.price-val').forEach((priceBox) => {
+    const currSpan = priceBox.querySelector('.price-curr');
+    const amountSpan = priceBox.querySelector('.price-amount');
+    const inrAmount = priceBox.getAttribute('data-inr');
+    if (currSpan) currSpan.textContent = '₹';
+    if (amountSpan && inrAmount) amountSpan.textContent = inrAmount;
+  });
+
+  // =========================================================================
+  // 9. INTERACTIVE PRE-SELECTION FROM SERVICES & PRICING
+  // =========================================================================
+  function preselectServiceInForm(serviceType) {
+    // 1. Scroll smoothly to contact
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Map serviceType to one of the 3 pills:
+    // "Landing Page", "Full Stack Website", "Shopify & E-Commerce"
+    let mappedOption = 'Landing Page';
+    if (serviceType) {
+      const lower = serviceType.toLowerCase();
+      if (lower.includes('full') || lower.includes('stack') || lower.includes('app') || lower.includes('saas')) {
+        mappedOption = 'Full Stack Website';
+      } else if (lower.includes('shopify') || lower.includes('commerce') || lower.includes('store')) {
+        mappedOption = 'Shopify & E-Commerce';
+      } else {
+        mappedOption = 'Landing Page';
+      }
+    }
+
+    // 2. Select matching Project Type pill
+    const typePills = document.querySelectorAll('#projectTypePills .pill-btn');
+    typePills.forEach((pill) => {
+      if (pill.getAttribute('data-type') === mappedOption) {
+        pill.classList.add('active');
+        const hiddenInput = document.getElementById('selectedProjectType');
+        if (hiddenInput) hiddenInput.value = mappedOption;
+      } else {
+        pill.classList.remove('active');
+      }
+    });
+
+    // 3. Focus on Name input
+    setTimeout(() => {
+      const clientNameInput = document.getElementById('clientName');
+      if (clientNameInput) clientNameInput.focus();
+    }, 450);
+  }
+
+  // Hook up Bento service buttons
+  document.querySelectorAll('.bento-action-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const preselect = btn.getAttribute('data-preselect') || 'Landing Page';
+      preselectServiceInForm(preselect);
+    });
+  });
+
+  // Hook up Pricing CTA "Contact Us" buttons
+  document.querySelectorAll('.btn-pricing-cta').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const tier = btn.getAttribute('data-tier') || 'Landing Page';
+      preselectServiceInForm(tier);
+    });
+  });
+
+  // Hook up Nav & Hero CTA preselects
+  document.querySelectorAll('[data-preselect]').forEach((cta) => {
+    if (!cta.classList.contains('bento-action-btn') && !cta.classList.contains('btn-pricing-cta')) {
+      cta.addEventListener('click', () => {
+        const preselect = cta.getAttribute('data-preselect');
+        preselectServiceInForm(preselect);
+      });
+    }
+  });
+
+  // =========================================================================
+  // 10. CONTACT FORM PILLS & WHATSAPP ROUTING
+  // =========================================================================
+  const ADMIN_WHATSAPP = "919942351777";
+
+  const projectTypePills = document.querySelectorAll('#projectTypePills .pill-btn');
+  const hiddenProjectType = document.getElementById('selectedProjectType');
+
+  projectTypePills.forEach((pill) => {
+    pill.addEventListener('click', () => {
+      projectTypePills.forEach((p) => p.classList.remove('active'));
+      pill.classList.add('active');
+      const val = pill.getAttribute('data-type');
+      if (hiddenProjectType) hiddenProjectType.value = val;
+    });
+  });
+
+  let isRoutingToWhatsApp = false;
+
+  function routeLeadToWhatsApp(e) {
+    if (e && e.preventDefault) {
+      e.preventDefault();
+    }
+
+    if (isRoutingToWhatsApp) return;
+
+    const nameInput = document.getElementById('clientName');
+    const contactInput = document.getElementById('clientContactNumber');
+    const whatsappInput = document.getElementById('clientWhatsappNumber');
+    const addressInput = document.getElementById('clientAddress');
+    const errorBox = document.getElementById('contactFormError');
+
+    const activeType = document.querySelector('#projectTypePills .pill-btn.active');
+    const selectedOption = activeType ? activeType.getAttribute('data-type') : (hiddenProjectType?.value || 'Landing Page');
+
+    const name = nameInput ? nameInput.value.trim() : '';
+    const contactNumber = contactInput ? contactInput.value.trim() : '';
+    const whatsappNumber = whatsappInput ? whatsappInput.value.trim() : '';
+    const address = addressInput ? addressInput.value.trim() : '';
+
+    // Clear previous field error states
+    [nameInput, contactInput, whatsappInput, addressInput].forEach((input) => {
+      if (input) {
+        input.classList.remove('field-error');
+        input.addEventListener('input', () => {
+          input.classList.remove('field-error');
+          if (errorBox) errorBox.style.display = 'none';
+        }, { once: true });
+      }
+    });
+
+    if (errorBox) {
+      errorBox.style.display = 'none';
+      errorBox.textContent = '';
+    }
+
+    // Validate that all fields are filled
+    const invalidFields = [];
+    if (!name && nameInput) invalidFields.push(nameInput);
+    if (!contactNumber && contactInput) invalidFields.push(contactInput);
+    if (!whatsappNumber && whatsappInput) invalidFields.push(whatsappInput);
+    if (!address && addressInput) invalidFields.push(addressInput);
+
+    if (invalidFields.length > 0) {
+      invalidFields.forEach((field) => field.classList.add('field-error'));
+      if (errorBox) {
+        errorBox.textContent = 'Please fill in all required fields before proceeding.';
+        errorBox.style.display = 'block';
+      }
+      invalidFields[0].focus();
+      return;
+    }
+
+    isRoutingToWhatsApp = true;
+    setTimeout(() => {
+      isRoutingToWhatsApp = false;
+    }, 1500);
+
+    // Dynamically construct the exact message string
+    const message = `Hello Skynet Studios! New Project Inquiry:
+• Service Needed: ${selectedOption}
+• Name: ${name}
+• Contact Number: ${contactNumber}
+• WhatsApp Number: ${whatsappNumber}
+• Address: ${address}`;
+
+    // URL-encode and open WhatsApp chat
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodedMessage}`;
+
+    const newTab = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+    if (!newTab || newTab.closed || typeof newTab.closed === 'undefined') {
+      window.location.href = whatsappUrl;
+    }
+  }
+
+  const contactForm = document.getElementById('projectContactForm');
+  const submitProjectBtn = document.getElementById('submitProjectBtn');
+  const contactWhatsAppBtn = document.getElementById('contactWhatsAppBtn');
+
+  if (contactForm) {
+    contactForm.addEventListener('submit', routeLeadToWhatsApp);
+  }
+
+  if (submitProjectBtn) {
+    submitProjectBtn.addEventListener('click', routeLeadToWhatsApp);
+  }
+
+  if (contactWhatsAppBtn) {
+    contactWhatsAppBtn.addEventListener('click', routeLeadToWhatsApp);
+  }
+
+  // =========================================================================
+  // 12. WORKFLOW TIMELINE ACCORDION INTERACTION
+  // =========================================================================
+  const timelineSteps = document.querySelectorAll('.timeline-step');
+  timelineSteps.forEach((step) => {
+    step.addEventListener('mouseenter', () => {
+      timelineSteps.forEach((s) => s.classList.remove('active'));
+      step.classList.add('active');
+    });
+  });
+
+  // =========================================================================
+  // 13. INTERSECTION OBSERVER SCROLL REVEALS & ACTIVE NAV
+  // =========================================================================
+  const revealElements = document.querySelectorAll('.reveal-on-scroll');
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.12,
+    rootMargin: '0px 0px -40px 0px'
+  });
+
+  revealElements.forEach((el) => observer.observe(el));
+
+  // Active Nav Link Spy
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links-desktop .nav-link');
+
+  window.addEventListener('scroll', () => {
+    let currentId = '';
+    const scrollPos = window.scrollY + 140;
+
+    sections.forEach((sec) => {
+      const top = sec.offsetTop;
+      const height = sec.offsetHeight;
+      if (scrollPos >= top && scrollPos < top + height) {
+        currentId = sec.getAttribute('id');
+      }
+    });
+
+    navLinks.forEach((link) => {
+      const href = link.getAttribute('href').substring(1);
+      if (href === currentId) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+  });
+
+  // =========================================================================
+  // 14. FOOTER FEEDBACK & STAR RATING INTERACTION
+  // =========================================================================
+  const starButtons = document.querySelectorAll('.star-buttons .star-btn');
+  const starRatingLabel = document.getElementById('starRatingLabel');
+  const hiddenStarRating = document.getElementById('selectedStarRating');
+  const feedbackForm = document.getElementById('footerFeedbackForm');
+  const feedbackSuccessAlert = document.getElementById('feedbackSuccessAlert');
+
+  const ratingDescriptions = {
+    1: '1.0 / 5.0 (Poor)',
+    2: '2.0 / 5.0 (Needs Improvement)',
+    3: '3.0 / 5.0 (Good)',
+    4: '4.0 / 5.0 (Great)',
+    5: '5.0 / 5.0 (Exceptional)'
+  };
+
+  function setStarRating(rating) {
+    if (hiddenStarRating) hiddenStarRating.value = rating;
+    starButtons.forEach((btn) => {
+      const btnRating = parseInt(btn.getAttribute('data-rating'), 10);
+      btn.classList.toggle('active', btnRating <= rating);
+    });
+    if (starRatingLabel) {
+      starRatingLabel.textContent = ratingDescriptions[rating] || `${rating}.0 / 5.0`;
+    }
+  }
+
+  starButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const rating = parseInt(btn.getAttribute('data-rating'), 10);
+      setStarRating(rating);
+    });
+
+    btn.addEventListener('mouseenter', () => {
+      const rating = parseInt(btn.getAttribute('data-rating'), 10);
+      starButtons.forEach((b) => {
+        const bRating = parseInt(b.getAttribute('data-rating'), 10);
+        b.classList.toggle('hovered', bRating <= rating);
+      });
+    });
+  });
+
+  const starRatingWrap = document.getElementById('starRatingWrap');
+  if (starRatingWrap) {
+    starRatingWrap.addEventListener('mouseleave', () => {
+      starButtons.forEach((b) => b.classList.remove('hovered'));
+    });
+  }
+
+  if (feedbackForm) {
+    feedbackForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const nameInput = document.getElementById('feedbackName');
+      const msgInput = document.getElementById('feedbackMessage');
+      const name = nameInput ? nameInput.value.trim() : '';
+      const message = msgInput ? msgInput.value.trim() : '';
+      const rating = hiddenStarRating ? hiddenStarRating.value : '5';
+
+      let hasError = false;
+      if (!name) {
+        if (nameInput) nameInput.classList.add('field-error');
+        hasError = true;
+      }
+      if (!message) {
+        if (msgInput) msgInput.classList.add('field-error');
+        hasError = true;
+      }
+
+      if (hasError) return;
+
+      // Save to localStorage
+      try {
+        const stored = JSON.parse(localStorage.getItem('skynet_client_feedback') || '[]');
+        stored.push({ name, rating, message, timestamp: new Date().toISOString() });
+        localStorage.setItem('skynet_client_feedback', JSON.stringify(stored));
+      } catch (err) {
+        console.warn('Could not store feedback in localStorage', err);
+      }
+
+      // Format WhatsApp pre-fill text
+      const waMsg = `Hello Skynet Studios! New Client Feedback:
+• Client Name: ${name}
+• Star Rating: ${rating}/5 Stars (${ratingDescriptions[rating] || ''})
+• Message: ${message}`;
+      const waUrl = `https://wa.me/919942351777?text=${encodeURIComponent(waMsg)}`;
+
+      // Show confirmation
+      if (feedbackSuccessAlert) {
+        feedbackSuccessAlert.innerHTML = `
+          <span class="success-icon">✓</span>
+          <span>Thank you, <strong>${name}</strong>! Your ${rating}-star feedback has been recorded.</span>
+          <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="feedback-wa-link">Share on WhatsApp →</a>
+        `;
+        feedbackSuccessAlert.style.display = 'flex';
+      }
+
+      // Reset fields
+      if (nameInput) nameInput.value = '';
+      if (msgInput) msgInput.value = '';
+      setStarRating(5);
+    });
+
+    const nameInput = document.getElementById('feedbackName');
+    const msgInput = document.getElementById('feedbackMessage');
+    if (nameInput) {
+      nameInput.addEventListener('input', () => nameInput.classList.remove('field-error'));
+    }
+    if (msgInput) {
+      msgInput.addEventListener('input', () => msgInput.classList.remove('field-error'));
+    }
+  }
+
+  const backToTopBtn = document.getElementById('backToTopBtn');
+  if (backToTopBtn) {
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+    // =========================================================================
+  // 15. MULTICOLORED AURORA CANVAS (Base Layer)
+  // Soft, organic, slowly morphing gradient orbs in vibrant professional tones:
+  // cyan (#00D2FF), royal violet (#7B2CBF), warm coral-pink (#FF4D8D),
+  // fresh emerald (#10B981), soft amber (#F59E0B) over off-white pearl (#F8FAFC)
+  // =========================================================================
+  const auroraCanvas = document.getElementById('auroraCanvas');
+  const gridCanvas = document.getElementById('gridCanvas');
+
+  // Aurora Canvas Engine
+  if (auroraCanvas && auroraCanvas.getContext) {
+    const ctx = auroraCanvas.getContext('2d');
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+
+    function resizeAurora() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      auroraCanvas.width = width * dpr;
+      auroraCanvas.height = height * dpr;
+      ctx.scale(dpr, dpr);
+    }
+    resizeAurora();
+    window.addEventListener('resize', resizeAurora, { passive: true });
+
+    // Organic morphing orbs in vibrant tones
+    const orbs = [
+      {
+        baseX: 0.16, baseY: 0.18, rad: 520,
+        r: 0, g: 210, b: 255, alpha: 0.40, // Cyan (#00D2FF)
+        speedX: 0.42, speedY: 0.32, phaseX: 0.2, phaseY: 1.2,
+        ampX: 130, ampY: 90
+      },
+      {
+        baseX: 0.84, baseY: 0.16, rad: 560,
+        r: 123, g: 44, b: 191, alpha: 0.36, // Royal Violet (#7B2CBF)
+        speedX: 0.36, speedY: 0.44, phaseX: 2.5, phaseY: 0.8,
+        ampX: 150, ampY: 110
+      },
+      {
+        baseX: 0.48, baseY: 0.76, rad: 520,
+        r: 255, g: 77, b: 141, alpha: 0.32, // Warm Coral-Pink (#FF4D8D)
+        speedX: 0.48, speedY: 0.34, phaseX: 4.1, phaseY: 2.8,
+        ampX: 140, ampY: 130
+      },
+      {
+        baseX: 0.10, baseY: 0.82, rad: 480,
+        r: 16, g: 185, b: 129, alpha: 0.28, // Fresh Emerald (#10B981)
+        speedX: 0.32, speedY: 0.40, phaseX: 1.4, phaseY: 3.4,
+        ampX: 110, ampY: 100
+      },
+      {
+        baseX: 0.90, baseY: 0.84, rad: 500,
+        r: 245, g: 158, b: 11, alpha: 0.30, // Soft Amber (#F59E0B)
+        speedX: 0.44, speedY: 0.38, phaseX: 3.7, phaseY: 4.2,
+        ampX: 140, ampY: 120
+      }
+    ];
+
+    let t = 0;
+    function renderAurora() {
+      t += 0.007;
+
+      // Fill off-white pearl base (#F8FAFC)
+      ctx.fillStyle = '#F8FAFC';
+      ctx.fillRect(0, 0, width, height);
+
+      // Render morphing orbs
+      orbs.forEach((orb) => {
+        const driftX = Math.sin(t * orb.speedX + orb.phaseX) * orb.ampX;
+        const driftY = Math.cos(t * orb.speedY + orb.phaseY) * orb.ampY;
+
+        const x = width * orb.baseX + driftX;
+        const y = height * orb.baseY + driftY;
+
+        const grad = ctx.createRadialGradient(x, y, 0, x, y, orb.rad);
+        grad.addColorStop(0, 'rgba(' + orb.r + ',' + orb.g + ',' + orb.b + ',' + orb.alpha + ')');
+        grad.addColorStop(0.45, 'rgba(' + orb.r + ',' + orb.g + ',' + orb.b + ',' + (orb.alpha * 0.48) + ')');
+        grad.addColorStop(0.75, 'rgba(' + orb.r + ',' + orb.g + ',' + orb.b + ',' + (orb.alpha * 0.12) + ')');
+        grad.addColorStop(1, 'rgba(' + orb.r + ',' + orb.g + ',' + orb.b + ',0)');
+
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(x, y, orb.rad, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
+    window._renderAurora = renderAurora;
+  }
+
+  // =========================================================================
+  // 16. ARCHITECTURAL GRID BACKGROUND (Middle Layer, Static)
+  // Clean, subtle base grid lines and intersection dots with native cursor.
+  // =========================================================================
+  if (gridCanvas && gridCanvas.getContext) {
+    const ctx = gridCanvas.getContext('2d');
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+    const spacing = 52;
+
+    function renderGrid() {
+      ctx.clearRect(0, 0, width, height);
+
+      const cols = Math.ceil(width / spacing);
+      const rows = Math.ceil(height / spacing);
+
+      // 1. Base architectural grid lines
+      ctx.beginPath();
+      for (let c = 0; c <= cols; c++) {
+        const x = c * spacing;
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
+      }
+      for (let r = 0; r <= rows; r++) {
+        const y = r * spacing;
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+      }
+      ctx.strokeStyle = 'rgba(15, 23, 42, 0.038)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // 2. Base intersection dots
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.065)';
+      for (let c = 0; c <= cols; c++) {
+        const x = c * spacing;
+        for (let r = 0; r <= rows; r++) {
+          const y = r * spacing;
+          ctx.beginPath();
+          ctx.arc(x, y, 1.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+
+    function resizeGrid() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      gridCanvas.width = width * dpr;
+      gridCanvas.height = height * dpr;
+      ctx.scale(dpr, dpr);
+      renderGrid();
+    }
+    resizeGrid();
+    window.addEventListener('resize', resizeGrid, { passive: true });
+  }
+
+  // Central 60fps Animation Loop
+  function masterBackgroundLoop() {
+    if (window._renderAurora) {
+      window._renderAurora();
+    }
+
+    requestAnimationFrame(masterBackgroundLoop);
+  }
+
+  requestAnimationFrame(masterBackgroundLoop);
+});

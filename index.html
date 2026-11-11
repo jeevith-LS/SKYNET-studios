@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skynet Studios // Futuristic Web Development & Full-Stack Creative Agency</title>
+  <meta name="description" content="We engineer high-impact landing pages, scalable full-stack web applications, and hyper-converting custom Shopify stores. Skynet Studios creative tech agency.">
+  <meta name="keywords" content="freelance web developer, full stack agency, high converting landing page, shopify developer, react nextjs, awwwards style website">
+  
+  <!-- Open Graph / SEO -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Skynet Studios // High-Impact Digital Experiences & Creative Engineering">
+  <meta property="og:description" content="Creative web studio engineering landing pages, full-stack web apps, and custom Shopify experiences.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Michroma&family=Montserrat:wght@700;800&family=Orbitron:wght@500;600;700;800;900&family=Space+Grotesk:wght@500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="light-theme">
+
+  <!-- Base Layer: Interactive Multicolored Aurora Canvas -->
+  <canvas id="auroraCanvas" class="aurora-canvas" aria-hidden="true"></canvas>
+
+  <!-- Middle Layer: Mouse-Reactive Architectural Grid Canvas -->
+  <canvas id="gridCanvas" class="grid-canvas" aria-hidden="true"></canvas>
+
+  <!-- Studio Grain / Noise Texture Overlay -->
+  <div class="studio-noise-overlay" aria-hidden="true"></div>
+
+  <!-- A. STICKY GLASSMORPHIC HEADER (NAVBAR) -->
+  <header class="navbar-wrapper" id="mainHeader">
+    <nav class="navbar container" aria-label="Main Navigation">
+      <a href="#" class="brand-logo" id="brandLogo" aria-label="Skynet Studios Home">
+        <div class="logo-mark">
+          <svg width="40" height="34" viewBox="0 0 54 44" fill="none" xmlns="http://www.w3.org/2000/svg" class="brandmark-svg">
+            <defs>
+              <!-- Vivid Electric Cyan to Royal Blue Gradient (Left Facets) -->
+              <linearGradient id="spireCyanBlue" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#00D2FF"/>
+                <stop offset="45%" stop-color="#0284C7"/>
+                <stop offset="100%" stop-color="#2563EB"/>
+              </linearGradient>
+              <!-- Vivid Indigo to Rich Violet Gradient (Right Facets) -->
+              <linearGradient id="spireViolet" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#6366F1"/>
+                <stop offset="60%" stop-color="#7C3AED"/>
+                <stop offset="100%" stop-color="#9333EA"/>
+              </linearGradient>
+              <!-- Sweeping Curved Horizon Arch Gradient -->
+              <linearGradient id="archGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#00D2FF"/>
+                <stop offset="30%" stop-color="#0284C7"/>
+                <stop offset="70%" stop-color="#6366F1"/>
+                <stop offset="100%" stop-color="#9333EA"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Five Needle-Point Skyline Spires (Vivid Cyan-to-Violet) -->
+            <!-- 1. Outer Left Spire (Short) -->
+            <polygon points="15,20 12,23 12,30 14,30" fill="url(#spireCyanBlue)"/>
+            <polygon points="15,20 14,30 16.5,30 16.5,22" fill="url(#spireViolet)"/>
+
+            <!-- 2. Inner Left Spire (Medium) -->
+            <polygon points="21,13 18,17 18,30 20,30" fill="url(#spireCyanBlue)"/>
+            <polygon points="21,13 20,30 22.5,30 22.5,15.5" fill="url(#spireViolet)"/>
+
+            <!-- 3. Center Spire (Tallest needle apex + antenna tip) -->
+            <line x1="27" y1="2" x2="27" y2="8" stroke="#0284C7" stroke-width="1.3" stroke-linecap="round"/>
+            <circle cx="27" cy="2" r="1.3" fill="#00D2FF" stroke="#0284C7" stroke-width="0.5"/>
+            <polygon points="27,7.5 24,12.5 24,30 27,30" fill="url(#spireCyanBlue)"/>
+            <polygon points="27,7.5 27,30 30,30 30,12.5" fill="url(#spireViolet)"/>
+            <line x1="27" y1="7.5" x2="27" y2="30" stroke="#FFFFFF" stroke-width="0.8" opacity="0.95"/>
+
+            <!-- 4. Inner Right Spire (Medium) -->
+            <polygon points="33,13 31.5,15.5 31.5,30 34,30" fill="url(#spireCyanBlue)"/>
+            <polygon points="33,13 34,30 36,30 36,17" fill="url(#spireViolet)"/>
+
+            <!-- 5. Outer Right Spire (Short) -->
+            <polygon points="39,20 37.5,22 37.5,30 40,30" fill="url(#spireCyanBlue)"/>
+            <polygon points="39,20 40,30 42,30 42,23" fill="url(#spireViolet)"/>
+
+            <!-- Crisp Curved Planetary Horizon Arch -->
+            <path d="M 6 34.5 Q 27 28 48 34.5 Q 27 30.5 6 34.5 Z" fill="url(#archGrad)"/>
+            <path d="M 11 33.6 Q 27 28.5 43 33.6" stroke="#FFFFFF" stroke-width="0.9" stroke-linecap="round" opacity="0.95"/>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">SKYNET</span>
+          <span class="logo-subtitle">— STUDIOS —</span>
+        </div>
+      </a>
+
+      <div class="nav-links-desktop">
+        <a href="#services" class="nav-link" id="navServices">Services</a>
+        <a href="#portfolio" class="nav-link" id="navWork">Work</a>
+        <a href="#pricing" class="nav-link" id="navPricing">Pricing</a>
+        <a href="#about" class="nav-link" id="navAbout">About</a>
+        <a href="#contact" class="nav-link" id="navContact">Contact</a>
+      </div>
+
+      <div class="nav-actions">
+        <a href="#contact" class="btn-magnetic btn-primary-glow" id="navCtaBtn" data-preselect="Landing Page">
+          <span class="btn-text">Need a project</span>
+          <span class="btn-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </span>
+        </a>
+
+        <!-- Mobile Menu Hamburger Button -->
+        <button class="mobile-toggle-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span class="bar bar-1"></span>
+          <span class="bar bar-2"></span>
+          <span class="bar bar-3"></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Mobile Drawer Navigation -->
+    <div class="mobile-drawer" id="mobileDrawer">
+      <div class="drawer-links">
+        <a href="#services" class="drawer-link">Services</a>
+        <a href="#portfolio" class="drawer-link">Work</a>
+        <a href="#pricing" class="drawer-link">Pricing</a>
+        <a href="#about" class="drawer-link">About</a>
+        <a href="#contact" class="drawer-link">Contact</a>
+        <a href="#contact" class="btn-primary-glow mobile-drawer-cta" data-preselect="Landing Page">Need a project</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="mainContent">
+
+    <!-- C. HERO SECTION -->
+    <section class="hero-section container" id="hero">
+      <div class="hero-layout">
+        <div class="hero-content reveal-on-scroll">
+          <div class="status-pill">
+            <span class="status-dot"></span>
+            <span class="status-text">AVAILABLE FOR FREELANCE PROJECTS</span>
+            <span class="status-tag">24/5</span>
+          </div>
+
+          <h1 class="hero-headline">
+            <span class="hero-line hero-line-1">We Engineer <span class="gradient-text-cyan">High-Impact</span> Websites &amp;</span>
+            <span class="hero-line hero-line-2"><span class="gradient-text-violet">Full-Stack</span> Digital Experiences</span>
+          </h1>
+
+          <p class="hero-subheadline">
+            From laser-focused conversion landing pages to scalable full-stack web applications and custom headless Shopify stores — we bridge creative futurism with rock-solid engineering that drives revenue.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- D. SERVICES & CAPABILITIES (INTERACTIVE BENTO GRID) -->
+    <section class="section-wrapper container" id="services">
+      <div class="section-header text-center reveal-on-scroll">
+        <div class="section-tag">
+          <span class="tag-symbol">//</span> CAPABILITIES & SOLUTIONS
+        </div>
+        <h2 class="section-title">
+          Engineered for <span class="gradient-text-cyan">High Performance</span> & <span class="gradient-text-violet">Maximum Conversion</span>
+        </h2>
+        <p class="section-desc">
+          We combine cutting-edge creative design with battle-tested software engineering to deliver products that don't just look stunning—they scale your business.
+        </p>
+      </div>
+
+      <!-- Bento Grid Layout -->
+      <div class="bento-grid">
+        
+        <!-- Bento 1: High-Converting Landing Pages (Large Span) -->
+        <div class="bento-card bento-span-2 spotlight-card" id="bentoLanding">
+          <div class="card-ambient-light"></div>
+          <div class="bento-content">
+            <div class="service-badge-row">
+              <span class="service-chip chip-cyan">CONVERSION OPTIMIZED</span>
+              <span class="service-speed">⚡ 5-Day Delivery</span>
+            </div>
+            <div class="bento-icon-box box-cyan">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00B4D8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                <line x1="8" y1="21" x2="16" y2="21"/>
+                <line x1="12" y1="17" x2="12" y2="21"/>
+              </svg>
+            </div>
+            <h3 class="bento-title">High-Converting Landing Pages</h3>
+            <p class="bento-text">
+              Turn paid traffic and organic visitors into paying customers. We design bespoke, interactive 3D landing pages with fluid GSAP scroll storytelling, strategic copywriting hierarchy, and instant loading speeds.
+            </p>
+            <ul class="feature-pills">
+              <li>Product Launch Pages</li>
+              <li>SaaS Funnels</li>
+              <li>WebGL & 3D Interactive</li>
+              <li>A/B Tested Wireframes</li>
+            </ul>
+            <div class="bento-footer">
+              <button class="bento-action-btn" data-preselect="Landing Page">
+                Book This Service <span>→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bento 2: Full-Stack Web Applications -->
+        <div class="bento-card spotlight-card" id="bentoFullstack">
+          <div class="card-ambient-light"></div>
+          <div class="bento-content">
+            <div class="service-badge-row">
+              <span class="service-chip chip-violet">SCALABLE ARCHITECTURE</span>
+            </div>
+            <div class="bento-icon-box box-violet">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#7928CA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 18 22 12 16 6"/>
+                <polyline points="8 6 2 12 8 18"/>
+              </svg>
+            </div>
+            <h3 class="bento-title">Full-Stack Web Applications</h3>
+            <p class="bento-text">
+              Custom web platforms, SaaS MVPs, real-time dashboards, and secure REST/GraphQL APIs engineered with Node.js, Next.js, TypeScript, and modern SQL/NoSQL databases.
+            </p>
+            <ul class="feature-pills">
+              <li>Custom Admin Dashboards</li>
+              <li>Auth & Role Management</li>
+              <li>AI & API Integrations</li>
+              <li>Serverless & Microservices</li>
+            </ul>
+            <div class="bento-footer">
+              <button class="bento-action-btn" data-preselect="Full-Stack Web App">
+                Build an App <span>→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bento 3: E-Commerce & Custom Shopify Stores -->
+        <div class="bento-card spotlight-card" id="bentoShopify">
+          <div class="card-ambient-light"></div>
+          <div class="bento-content">
+            <div class="service-badge-row">
+              <span class="service-chip chip-coral">REVENUE MULTIPLIER</span>
+            </div>
+            <div class="bento-icon-box box-coral">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF0080" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <path d="M16 10a4 4 0 0 1-8 0"/>
+              </svg>
+            </div>
+            <h3 class="bento-title">E-Commerce & Custom Shopify</h3>
+            <p class="bento-text">
+              Bespoke Liquid Shopify themes, headless e-commerce, custom 1-click checkout upsells, subscription integration, and payment gateway architectures built for massive scale.
+            </p>
+            <ul class="feature-pills">
+              <li>Custom Liquid Themes</li>
+              <li>Headless Shopify Storefronts</li>
+              <li>Stripe & Global Payments</li>
+              <li>Cart Abandonment Funnels</li>
+            </ul>
+            <div class="bento-footer">
+              <button class="bento-action-btn" data-preselect="Shopify Store">
+                Scale Store <span>→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bento 4: UI/UX Design, Speed Optimization & SEO (Large Span) -->
+        <div class="bento-card bento-span-2 spotlight-card" id="bentoSpeed">
+          <div class="card-ambient-light"></div>
+          <div class="bento-content">
+            <div class="service-badge-row">
+              <span class="service-chip chip-amber">PERFORMANCE OBSESSED</span>
+              <span class="service-speed">⚡ Lighthouse 99+</span>
+            </div>
+            <div class="bento-icon-box box-amber">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+              </svg>
+            </div>
+            <h3 class="bento-title">UI/UX Design, Speed Optimization & SEO</h3>
+            <p class="bento-text">
+              Transform slow, clunky websites into ultra-fast digital machines. We execute surgical Core Web Vitals optimization, reduce bundle sizes, optimize LCP/INP, and implement structured semantic SEO for top rankings.
+            </p>
+            <ul class="feature-pills">
+              <li>Figma to Pixel-Perfect Code</li>
+              <li>Sub-Second LCP Performance</li>
+              <li>Schema Markup & Tech SEO</li>
+              <li>Zero Layout Shift (CLS: 0.00)</li>
+            </ul>
+            <div class="bento-footer">
+              <button class="bento-action-btn" data-preselect="Redesign / Other">
+                Optimize My Site <span>→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Infinite Scrolling Tech-Stack Strip -->
+      <div class="tech-stack-container reveal-on-scroll">
+        <div class="tech-stack-label">
+          <span class="label-dot"></span> BATTLE-TESTED MODERN TECH STACK
+        </div>
+        <div class="tech-stack-marquee">
+          <div class="tech-stack-track" id="techStackTrack">
+            <!-- Tech Pills -->
+            <span class="tech-pill"><span class="tech-icon">⚛️</span> React</span>
+            <span class="tech-pill"><span class="tech-icon">▲</span> Next.js 15</span>
+            <span class="tech-pill"><span class="tech-icon">🟦</span> TypeScript</span>
+            <span class="tech-pill"><span class="tech-icon">🟢</span> Node.js</span>
+            <span class="tech-pill"><span class="tech-icon">🛍️</span> Shopify Liquid</span>
+            <span class="tech-pill"><span class="tech-icon">🌐</span> Three.js / WebGL</span>
+            <span class="tech-pill"><span class="tech-icon">💨</span> Tailwind CSS</span>
+            <span class="tech-pill"><span class="tech-icon">🐘</span> PostgreSQL</span>
+            <span class="tech-pill"><span class="tech-icon">🍃</span> MongoDB</span>
+            <span class="tech-pill"><span class="tech-icon">⚡</span> GraphQL</span>
+            <span class="tech-pill"><span class="tech-icon">💳</span> Stripe API</span>
+            <span class="tech-pill"><span class="tech-icon">🐍</span> Python FastAPI</span>
+            <!-- Duplicate for infinite seamless scroll -->
+            <span class="tech-pill"><span class="tech-icon">⚛️</span> React</span>
+            <span class="tech-pill"><span class="tech-icon">▲</span> Next.js 15</span>
+            <span class="tech-pill"><span class="tech-icon">🟦</span> TypeScript</span>
+            <span class="tech-pill"><span class="tech-icon">🟢</span> Node.js</span>
+            <span class="tech-pill"><span class="tech-icon">🛍️</span> Shopify Liquid</span>
+            <span class="tech-pill"><span class="tech-icon">🌐</span> Three.js / WebGL</span>
+            <span class="tech-pill"><span class="tech-icon">💨</span> Tailwind CSS</span>
+            <span class="tech-pill"><span class="tech-icon">🐘</span> PostgreSQL</span>
+            <span class="tech-pill"><span class="tech-icon">🍃</span> MongoDB</span>
+            <span class="tech-pill"><span class="tech-icon">⚡</span> GraphQL</span>
+            <span class="tech-pill"><span class="tech-icon">💳</span> Stripe API</span>
+            <span class="tech-pill"><span class="tech-icon">🐍</span> Python FastAPI</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- E. PORTFOLIO / FEATURED PROJECTS SECTION -->
+    <section class="section-wrapper container" id="portfolio">
+      <div class="section-header text-center reveal-on-scroll">
+        <div class="section-tag">
+          <span class="tag-symbol">//</span> PROVEN CASE STUDIES
+        </div>
+        <h2 class="section-title">
+          Selected <span class="gradient-text-cyan">Masterpieces</span> & <span class="gradient-text-violet">High-ROI</span> Deliverables
+        </h2>
+        <p class="section-desc">
+          Explore our recent production builds across interactive SaaS landing pages, scalable full-stack applications, and high-revenue custom Shopify stores.
+        </p>
+      </div>
+
+      <!-- Category Filter Bar with Horizontal '+ Add' Action Button -->
+      <div class="filter-bar-row reveal-on-scroll">
+        <div class="filter-tabs-wrapper">
+          <div class="filter-tabs" role="tablist" id="portfolioFilters">
+            <button class="filter-tab active" data-filter="all" role="tab" aria-selected="true">
+              <span class="tab-indicator"></span> All Projects <span class="tab-count" id="countAll">(0)</span>
+            </button>
+            <button class="filter-tab" data-filter="landing" role="tab" aria-selected="false">
+              <span class="tab-indicator"></span> Landing Pages <span class="tab-count" id="countLanding">(0)</span>
+            </button>
+            <button class="filter-tab" data-filter="fullstack" role="tab" aria-selected="false">
+              <span class="tab-indicator"></span> Full-Stack web site <span class="tab-count" id="countFullstack">(0)</span>
+            </button>
+            <button class="filter-tab" data-filter="shopify" role="tab" aria-selected="false">
+              <span class="tab-indicator"></span> Shopify &amp; E-Commerce <span class="tab-count" id="countShopify">(0)</span>
+            </button>
+            <button class="filter-tab" data-filter="ongoing" role="tab" aria-selected="false">
+              <span class="tab-indicator"></span> Projects On-going <span class="tab-count" id="countOngoing">(0)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- '+ Add' Action Button positioned on the far right -->
+        <button class="btn-add-project" id="openAddProjectModalBtn" type="button" aria-label="Add new project or ongoing build">
+          <span class="add-icon">+</span>
+          <span class="add-text">Add</span>
+        </button>
+      </div>
+
+      <!-- Professional Empty State Screen (Displayed when 0 projects are published) -->
+      <div class="portfolio-empty-state" id="portfolioEmptyState" role="region" aria-label="Portfolio archive status">
+        <div class="empty-state-card">
+          <div class="empty-state-ambient-glow"></div>
+          
+          <div class="empty-state-icon-wrapper">
+            <div class="empty-state-icon-box">
+              <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                <line x1="8" y1="21" x2="16" y2="21"/>
+                <line x1="12" y1="17" x2="12" y2="21"/>
+                <path d="M7 8h10M7 11h6" stroke-dasharray="2 2" opacity="0.6"/>
+              </svg>
+            </div>
+            <div class="empty-state-pulse-chip">
+              <span class="empty-pulse-dot"></span>
+              <span class="empty-chip-text">ARCHIVE STATUS // ACTIVE SPRINT</span>
+            </div>
+          </div>
+
+          <h3 class="empty-state-title">Portfolio Archive Under Construction</h3>
+          
+          <p class="empty-state-subtitle">
+            Live client case studies, upcoming deployments, and production builds will appear here as sprints are completed.
+          </p>
+
+          <div class="empty-state-features">
+            <div class="empty-feature-item">
+              <span class="empty-feature-check">⚡</span>
+              <span>100% Bespoke Code</span>
+            </div>
+            <div class="empty-feature-item">
+              <span class="empty-feature-check">⚡</span>
+              <span>Sub-Second Performance</span>
+            </div>
+            <div class="empty-feature-item">
+              <span class="empty-feature-check">⚡</span>
+              <span>Live Production Builds</span>
+            </div>
+          </div>
+
+          <div class="empty-state-actions">
+            <button type="button" class="btn-magnetic btn-empty-add" id="emptyStateAddBtn">
+              <span class="btn-icon">+</span>
+              <span class="btn-text">Add Your First Project</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project Cards Grid (Populated dynamically from saved builds) -->
+      <div class="projects-grid" id="projectsGrid"></div>
+
+      <!-- Centered 'Show More' Button -->
+      <div class="portfolio-show-more-wrapper" id="portfolioShowMoreWrapper">
+        <button type="button" class="btn-show-more-projects" id="showMoreProjectsBtn" aria-label="Show all portfolio projects">
+          <span>Show More Projects</span>
+          <span class="show-more-icon">↓</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- F. INTERACTIVE PRICING SECTION -->
+    <section class="section-wrapper container" id="pricing">
+      <div class="section-header text-center reveal-on-scroll">
+        <div class="section-tag">
+          <span class="tag-symbol">//</span> TRANSPARENT VALUE PRICING
+        </div>
+        <h2 class="section-title">
+          Predictable Investments, <span class="gradient-text-cyan">Exponential Returns</span>
+        </h2>
+        <p class="section-desc">
+          No hidden hourly fees or surprise invoices. Clear upfront sprint pricing, strict deadline guarantees, and direct communication with your senior lead engineer.
+        </p>
+      </div>
+
+      <!-- Pricing Cards Grid -->
+      <div class="pricing-grid">
+
+        <!-- Card 1: Landing Page -->
+        <div class="pricing-card spotlight-card" id="pricingTier1">
+          <div class="card-ambient-light"></div>
+          
+          <!-- 1. Heading -->
+          <div class="pricing-header-top">
+            <div class="tier-badge-row">
+              <span class="tier-badge">CONVERSION SPRINT</span>
+            </div>
+            <h3 class="tier-name">Landing Page</h3>
+          </div>
+
+          <!-- 2. Price -->
+          <div class="tier-price-box">
+            <div class="price-val" data-usd="320" data-inr="25,000">
+              <span class="price-curr">₹</span><span class="price-amount">25,000</span>
+            </div>
+            <span class="price-period">complete high-converting landing page</span>
+          </div>
+
+          <!-- 3. Contact Button -->
+          <button type="button" class="btn-pricing-cta" data-tier="Landing Page" data-budget="₹25,000">
+            Contact Us
+          </button>
+
+          <!-- 4. Project Finish Time -->
+          <div class="tier-timeline">
+            <span class="time-icon">⚡</span> <strong>1 Week</strong> Finish Time
+          </div>
+
+          <!-- 5. Service Mentions (Features) -->
+          <ul class="tier-features-list">
+            <li><span class="chk">✓</span> Custom interactive design</li>
+            <li><span class="chk">✓</span> Responsive mobile layout</li>
+            <li><span class="chk">✓</span> On-page SEO optimization</li>
+            <li><span class="chk">✓</span> Sub-second loading speeds</li>
+          </ul>
+        </div>
+
+        <!-- Card 2: Full Stack Website -->
+        <div class="pricing-card spotlight-card" id="pricingTier2">
+          <div class="card-ambient-light"></div>
+          
+          <!-- 1. Heading -->
+          <div class="pricing-header-top">
+            <div class="tier-badge-row">
+              <span class="tier-badge">FLAGSHIP ARCHITECTURE</span>
+            </div>
+            <h3 class="tier-name">Full Stack Website</h3>
+          </div>
+
+          <!-- 2. Price -->
+          <div class="tier-price-box">
+            <div class="price-val" data-usd="640" data-inr="50,000">
+              <span class="price-curr">₹</span><span class="price-amount">50,000</span>
+            </div>
+            <span class="price-period">custom backend &amp; database architecture</span>
+          </div>
+
+          <!-- 3. Contact Button -->
+          <button type="button" class="btn-pricing-cta" data-tier="Full Stack Website" data-budget="₹50,000">
+            Contact Us
+          </button>
+
+          <!-- 4. Project Finish Time -->
+          <div class="tier-timeline">
+            <span class="time-icon">⚡</span> <strong>3 Weeks</strong> Finish Time
+          </div>
+
+          <!-- 5. Service Mentions (Features) -->
+          <ul class="tier-features-list">
+            <li><span class="chk">✓</span> Custom backend architecture</li>
+            <li><span class="chk">✓</span> Secure database integration</li>
+            <li><span class="chk">✓</span> User authentication</li>
+            <li><span class="chk">✓</span> Dynamic admin dashboard</li>
+          </ul>
+        </div>
+
+        <!-- Card 3: Shopify & E-Commerce -->
+        <div class="pricing-card spotlight-card" id="pricingTier3">
+          <div class="card-ambient-light"></div>
+          
+          <!-- 1. Heading -->
+          <div class="pricing-header-top">
+            <div class="tier-badge-row">
+              <span class="tier-badge">HIGH REVENUE STORE</span>
+            </div>
+            <h3 class="tier-name">Shopify &amp; E-Commerce</h3>
+          </div>
+
+          <!-- 2. Price -->
+          <div class="tier-price-box">
+            <div class="price-val" data-usd="760" data-inr="60,000">
+              <span class="price-curr">₹</span><span class="price-amount">60,000</span>
+            </div>
+            <span class="price-period">turnkey custom Shopify 2.0 store</span>
+          </div>
+
+          <!-- 3. Contact Button -->
+          <button type="button" class="btn-pricing-cta" data-tier="Shopify &amp; E-Commerce" data-budget="₹60,000">
+            Contact Us
+          </button>
+
+          <!-- 4. Project Finish Time -->
+          <div class="tier-timeline">
+            <span class="time-icon">⚡</span> <strong>1 Month</strong> Finish Time
+          </div>
+
+          <!-- 5. Service Mentions (Features) -->
+          <ul class="tier-features-list">
+            <li><span class="chk">✓</span> Complete store setup</li>
+            <li><span class="chk">✓</span> Custom theme design</li>
+            <li><span class="chk">✓</span> Payment gateway integration</li>
+            <li><span class="chk">✓</span> High-converting product pages</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- G. ABOUT & EXECUTION PROCESS SECTION -->
+    <section class="section-wrapper container" id="about">
+      <div class="about-grid">
+        
+        <!-- Left: Brand Story -->
+        <div class="about-story reveal-on-scroll">
+          <div class="section-tag">
+            <span class="tag-symbol">//</span> THE SKYNET STUDIOS MANIFESTO
+          </div>
+          <h2 class="section-title">
+            Engineering Digital Systems That Outpace The <span class="gradient-text-cyan">Competition</span>
+          </h2>
+          <div class="story-paragraphs">
+            <p>
+              Most freelance agencies copy-paste bloated WordPress templates and deliver slow, generic sites that fail to convert. 
+              <strong>Skynet Studios was founded on a different standard:</strong> we build bespoke, futuristic web experiences powered by modern full-stack architectures, clean code, and relentless optimization.
+            </p>
+            <p>
+              Whether you are an ambitious venture-backed startup launching an AI product, an e-commerce brand scaling to 7-figures on Shopify, or an enterprise needing a custom dashboard, we bring high-agency execution with zero fluff.
+            </p>
+          </div>
+
+          <!-- Why Choose Us Pillars -->
+          <div class="pillars-grid">
+            <div class="pillar-card">
+              <span class="pillar-icon">⚡</span>
+              <h4>Speed As A Feature</h4>
+              <p>Every millisecond saved increases your bottom line. We target sub-second initial loads across all devices.</p>
+            </div>
+            <div class="pillar-card">
+              <span class="pillar-icon">💎</span>
+              <h4>Awwwards Visuals</h4>
+              <p>Dynamic micro-animations, vibrant aesthetics, and modern glassmorphism that captivates every visitor.</p>
+            </div>
+            <div class="pillar-card">
+              <span class="pillar-icon">🔒</span>
+              <h4>Production Code</h4>
+              <p>Clean TypeScript, strict linting, zero technical debt, and maintainable modular architecture.</p>
+            </div>
+            <div class="pillar-card">
+              <span class="pillar-icon">🤝</span>
+              <h4>Direct Senior Access</h4>
+              <p>No account managers or outsourced junior teams. You interface directly with senior software architects.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Interactive 4-Step Workflow Timeline -->
+        <div class="about-process reveal-on-scroll">
+          <div class="process-header">
+            <span class="process-tag">SYSTEMATIC EXECUTION</span>
+            <h3 class="process-heading">Our 4-Step Sprint Workflow</h3>
+            <p class="process-sub">A battle-tested agile roadmap designed for total transparency and zero surprises.</p>
+          </div>
+
+          <div class="timeline-steps" id="processTimeline">
+            
+            <!-- Step 1 -->
+            <div class="timeline-step active" data-step="1">
+              <div class="step-num-col">
+                <span class="step-circle">01</span>
+                <span class="step-line"></span>
+              </div>
+              <div class="step-content-card">
+                <div class="step-title-row">
+                  <h4 class="step-name">Strategy & Wireframing</h4>
+                  <span class="step-duration">Days 1 - 2</span>
+                </div>
+                <p class="step-desc">
+                  We reverse-engineer your conversion goals, analyze target audience behavior, formulate high-intent copywriting hierarchy, and build low-fidelity UX wireframes.
+                </p>
+                <div class="step-deliverable">
+                  <span class="d-label">Key Output:</span> UX Blueprint, Strategy Map & Content Hierarchy
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="timeline-step" data-step="2">
+              <div class="step-num-col">
+                <span class="step-circle">02</span>
+                <span class="step-line"></span>
+              </div>
+              <div class="step-content-card">
+                <div class="step-title-row">
+                  <h4 class="step-name">Interactive UI/UX Design</h4>
+                  <span class="step-duration">Days 3 - 5</span>
+                </div>
+                <p class="step-desc">
+                  Crafting the high-fidelity design system in Figma. Interactive micro-interactions, custom design assets, typography systems, and responsive design states.
+                </p>
+                <div class="step-deliverable">
+                  <span class="d-label">Key Output:</span> Clickable Prototype, Design Tokens & Component Library
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="timeline-step" data-step="3">
+              <div class="step-num-col">
+                <span class="step-circle">03</span>
+                <span class="step-line"></span>
+              </div>
+              <div class="step-content-card">
+                <div class="step-title-row">
+                  <h4 class="step-name">Full-Stack / Shopify Development</h4>
+                  <span class="step-duration">Days 6 - 10</span>
+                </div>
+                <p class="step-desc">
+                  Writing clean, modular code with React, Next.js, or Shopify Liquid. Implementing mouse-tracking spotlights, 3D card tilt physics, backend database routes, and payment integrations.
+                </p>
+                <div class="step-deliverable">
+                  <span class="d-label">Key Output:</span> Private Staging URL & Real-Time Preview
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="timeline-step" data-step="4">
+              <div class="step-num-col">
+                <span class="step-circle">04</span>
+                <span class="step-line"></span>
+              </div>
+              <div class="step-content-card">
+                <div class="step-title-row">
+                  <h4 class="step-name">Testing, Launch & Scale</h4>
+                  <span class="step-duration">Days 11 - 14</span>
+                </div>
+                <p class="step-desc">
+                  Rigorous cross-browser testing across mobile/tablet/desktop, Core Web Vitals stress tests, DNS propagation, production SSL setup, and handover documentation.
+                </p>
+                <div class="step-deliverable">
+                  <span class="d-label">Key Output:</span> Live Production Deployment, Analytics & Warranty
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- H. INTERACTIVE CONTACT SECTION -->
+    <section class="section-wrapper container" id="contact">
+      <div class="section-header text-center reveal-on-scroll">
+        <div class="section-tag">
+          <span class="tag-symbol">//</span> LET'S COLLABORATE
+        </div>
+        <h2 class="section-title">
+          Ready to Build Something <span class="gradient-text-cyan">Iconic</span>?
+        </h2>
+        <p class="section-desc">
+          Tell us about your product or brand. Connect directly with us on WhatsApp for instant project scoping, architecture planning, and prototype delivery.
+        </p>
+      </div>
+
+      <div class="contact-card contact-card-single spotlight-card reveal-on-scroll">
+        <div class="card-ambient-light"></div>
+        <form id="projectContactForm" class="project-form contact-form-single" novalidate>
+          
+          <!-- 1. What You Need -->
+          <div class="form-group">
+            <label class="form-label">
+              <span class="label-number">01</span> What You Need *
+            </label>
+            <div class="pills-selector pills-selector-3" id="projectTypePills" role="radiogroup" aria-label="What You Need">
+              <button type="button" class="pill-btn active" data-type="Landing Page">
+                Landing Page
+              </button>
+              <button type="button" class="pill-btn" data-type="Full Stack Website">
+                Full Stack Website
+              </button>
+              <button type="button" class="pill-btn" data-type="Shopify & E-Commerce">
+                Shopify & E-Commerce
+              </button>
+            </div>
+            <input type="hidden" name="projectType" id="selectedProjectType" value="Landing Page">
+          </div>
+
+          <!-- 2. Your Name -->
+          <div class="form-group">
+            <label for="clientName" class="form-label">
+              <span class="label-number">02</span> Your Name *
+            </label>
+            <input type="text" id="clientName" name="name" class="form-input" placeholder="e.g. Alex Vance" required>
+          </div>
+
+          <!-- 3. Contact Number -->
+          <div class="form-group">
+            <label for="clientContactNumber" class="form-label">
+              <span class="label-number">03</span> Contact Number *
+            </label>
+            <input type="tel" id="clientContactNumber" name="contactNumber" class="form-input" placeholder="e.g. +91 98765 43210" required>
+          </div>
+
+          <!-- 4. WhatsApp Number -->
+          <div class="form-group">
+            <label for="clientWhatsappNumber" class="form-label">
+              <span class="label-number">04</span> WhatsApp Number *
+            </label>
+            <input type="tel" id="clientWhatsappNumber" name="whatsappNumber" class="form-input" placeholder="e.g. +91 99423 51777" required>
+          </div>
+
+          <!-- 5. Address -->
+          <div class="form-group">
+            <label for="clientAddress" class="form-label">
+              <span class="label-number">05</span> Address *
+            </label>
+            <textarea id="clientAddress" name="address" class="form-textarea" rows="3" placeholder="Enter your business or residential address..." required></textarea>
+          </div>
+
+          <!-- Form Error Alert -->
+          <div class="contact-error-alert" id="contactFormError" style="display: none;" role="alert">
+            Please fill in all required fields before proceeding.
+          </div>
+
+          <!-- Dual Action Buttons -->
+          <div class="contact-actions-row">
+            <button type="button" class="btn-dual btn-primary-glow" id="submitProjectBtn">
+              <span class="btn-text">Submit</span>
+              <span class="btn-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </span>
+            </button>
+            <button type="button" class="btn-dual btn-primary-glow" id="contactWhatsAppBtn">
+              <span class="btn-text">Contact</span>
+              <span class="btn-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+              </span>
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer-wrapper">
+    <div class="container footer-content">
+      
+      <!-- Top Grid: Direct Contact Info & Client Feedback -->
+      <div class="footer-main-grid">
+        
+        <!-- Column 1: Direct Contact Info -->
+        <div class="footer-contact-info-col">
+          <div class="section-tag footer-tag">
+            <span class="tag-symbol">//</span> DIRECT CHANNELS
+          </div>
+          <h3 class="footer-section-title">Contact Info</h3>
+          <p class="footer-section-desc">
+            Direct access to our senior engineering sprint team. Reach out for priority bookings, consultations, or direct WhatsApp chats.
+          </p>
+
+          <div class="footer-contact-cards-wrap">
+            <!-- Email Item -->
+            <a href="mailto:skynetstudios2026@gmail.com" class="footer-contact-item" aria-label="Send email to skynetstudios2026@gmail.com">
+              <div class="contact-item-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+              </div>
+              <div class="contact-item-content">
+                <span class="contact-item-label">Direct Email</span>
+                <span class="contact-item-val">skynetstudios2026@gmail.com</span>
+              </div>
+            </a>
+
+            <!-- Mobile / WhatsApp Item -->
+            <div class="footer-contact-item footer-phone-item">
+              <div class="contact-item-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+              </div>
+              <div class="contact-item-content">
+                <span class="contact-item-label">Mobile / WhatsApp</span>
+                <div class="contact-links-duo">
+                  <a href="tel:+919942351777" class="contact-item-val">+91 9942351777</a>
+                  <a href="https://wa.me/919942351777" target="_blank" rel="noopener noreferrer" class="footer-wa-badge">
+                    <span class="wa-beacon-dot"></span> Chat on WhatsApp →
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 2: Client Feedback Section -->
+        <div class="footer-feedback-col">
+          <div class="footer-feedback-card spotlight-card">
+            <div class="feedback-card-header">
+              <div class="section-tag footer-tag">
+                <span class="tag-symbol">//</span> CLIENT EXPERIENCE
+              </div>
+              <h4 class="feedback-title">Quick Feedback</h4>
+              <p class="feedback-sub">Share your experience working with Skynet Studios.</p>
+            </div>
+
+            <form id="footerFeedbackForm" class="footer-feedback-form" novalidate>
+              <!-- Client Name -->
+              <div class="feedback-form-group">
+                <label for="feedbackName" class="feedback-label">Your Name</label>
+                <input type="text" id="feedbackName" class="form-input feedback-input" placeholder="e.g. Sarah Jenkins / TechLead" required>
+              </div>
+
+              <!-- Interactive Star Rating -->
+              <div class="feedback-form-group">
+                <label class="feedback-label">Your Rating</label>
+                <div class="star-rating-wrap" id="starRatingWrap">
+                  <div class="star-buttons" role="radiogroup" aria-label="Rating from 1 to 5 stars">
+                    <button type="button" class="star-btn active" data-rating="1" title="1 Star">★</button>
+                    <button type="button" class="star-btn active" data-rating="2" title="2 Stars">★</button>
+                    <button type="button" class="star-btn active" data-rating="3" title="3 Stars">★</button>
+                    <button type="button" class="star-btn active" data-rating="4" title="4 Stars">★</button>
+                    <button type="button" class="star-btn active" data-rating="5" title="5 Stars">★</button>
+                  </div>
+                  <span class="star-rating-label" id="starRatingLabel">5.0 / 5.0 (Exceptional)</span>
+                  <input type="hidden" id="selectedStarRating" value="5">
+                </div>
+              </div>
+
+              <!-- Feedback Message -->
+              <div class="feedback-form-group">
+                <label for="feedbackMessage" class="feedback-label">Feedback Message</label>
+                <textarea id="feedbackMessage" class="form-textarea feedback-textarea" rows="3" placeholder="Share your experience working with Skynet Studios..." required></textarea>
+              </div>
+
+              <!-- Submit Feedback Button -->
+              <button type="submit" class="btn-primary-glow btn-feedback-submit" id="submitFeedbackBtn">
+                <span class="btn-text">Send Feedback</span>
+                <span class="btn-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </span>
+              </button>
+
+              <!-- Feedback Confirmation Alert -->
+              <div class="feedback-success-alert" id="feedbackSuccessAlert" style="display: none;" role="alert">
+                <span class="success-icon">✓</span>
+                <span>Thank you! Your feedback has been sent.</span>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Massive Company Logo Showcase Centerpiece -->
+      <div class="footer-massive-logo-showcase">
+        <div class="massive-logo-ambient-glow"></div>
+        <div class="massive-logo-wrapper">
+          <div class="massive-emblem-wrap">
+            <svg width="112" height="92" viewBox="0 0 54 44" fill="none" xmlns="http://www.w3.org/2000/svg" class="massive-brandmark-svg">
+              <defs>
+                <linearGradient id="massiveSpireCyanBlue" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#00D2FF"/>
+                  <stop offset="45%" stop-color="#0284C7"/>
+                  <stop offset="100%" stop-color="#2563EB"/>
+                </linearGradient>
+                <linearGradient id="massiveSpireViolet" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#6366F1"/>
+                  <stop offset="60%" stop-color="#7C3AED"/>
+                  <stop offset="100%" stop-color="#9333EA"/>
+                </linearGradient>
+                <linearGradient id="massiveArchGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#00D2FF"/>
+                  <stop offset="30%" stop-color="#0284C7"/>
+                  <stop offset="70%" stop-color="#6366F1"/>
+                  <stop offset="100%" stop-color="#9333EA"/>
+                </linearGradient>
+              </defs>
+
+              <!-- Five Needle-Point Skyline Spires -->
+              <polygon points="15,20 12,23 12,30 14,30" fill="url(#massiveSpireCyanBlue)"/>
+              <polygon points="15,20 14,30 16.5,30 16.5,22" fill="url(#massiveSpireViolet)"/>
+
+              <polygon points="21,13 18,17 18,30 20,30" fill="url(#massiveSpireCyanBlue)"/>
+              <polygon points="21,13 20,30 22.5,30 22.5,15.5" fill="url(#massiveSpireViolet)"/>
+
+              <line x1="27" y1="2" x2="27" y2="8" stroke="#0284C7" stroke-width="1.3" stroke-linecap="round"/>
+              <circle cx="27" cy="2" r="1.3" fill="#00D2FF" stroke="#0284C7" stroke-width="0.5"/>
+              <polygon points="27,7.5 24,12.5 24,30 27,30" fill="url(#massiveSpireCyanBlue)"/>
+              <polygon points="27,7.5 27,30 30,30 30,12.5" fill="url(#massiveSpireViolet)"/>
+              <line x1="27" y1="7.5" x2="27" y2="30" stroke="#FFFFFF" stroke-width="0.8" opacity="0.95"/>
+
+              <polygon points="33,13 31.5,15.5 31.5,30 34,30" fill="url(#massiveSpireCyanBlue)"/>
+              <polygon points="33,13 34,30 36,30 36,17" fill="url(#massiveSpireViolet)"/>
+
+              <polygon points="39,20 37.5,22 37.5,30 40,30" fill="url(#massiveSpireCyanBlue)"/>
+              <polygon points="39,20 40,30 42,30 42,23" fill="url(#massiveSpireViolet)"/>
+
+              <!-- Crisp Curved Planetary Horizon Arch -->
+              <path d="M 6 34.5 Q 27 28 48 34.5 Q 27 30.5 6 34.5 Z" fill="url(#massiveArchGrad)"/>
+              <path d="M 11 33.6 Q 27 28.5 43 33.6" stroke="#FFFFFF" stroke-width="0.9" stroke-linecap="round" opacity="0.95"/>
+            </svg>
+          </div>
+          <div class="massive-wordmark-wrap">
+            <span class="massive-logo-title">SKYNET</span>
+            <span class="massive-logo-subtitle">— STUDIOS —</span>
+          </div>
+          <p class="massive-logo-tagline">Architecting High-Conversion Digital Realities for Forward-Thinking Brands</p>
+        </div>
+      </div>
+
+      <!-- Bottom Copyright & Back to Top -->
+      <div class="footer-bottom">
+        <div class="footer-copy">
+          © 2026 SKYNET STUDIOS. All rights reserved. Engineered with Vanilla JS, CSS3 & Precision.
+        </div>
+        <div class="footer-back-top">
+          <button id="backToTopBtn" aria-label="Back to top">
+            Back to Top ↑
+          </button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CASE STUDY INTERACTIVE MODAL (Native Modern Dialog) -->
+  <dialog id="caseStudyModal" class="case-study-modal" aria-labelledby="modalTitle">
+    <div class="modal-dialog-content">
+      <button class="modal-close-btn" id="closeModalBtn" aria-label="Close Case Study Modal">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+
+      <div class="modal-header">
+        <div class="modal-badge-row">
+          <span class="modal-category" id="modalCategory">LANDING PAGE</span>
+          <span class="modal-metric-chip" id="modalMetric">+215% Conversion</span>
+        </div>
+        <h3 class="modal-title" id="modalTitle">Project Case Study</h3>
+        <p class="modal-lead" id="modalLead">Executive summary of the technical architecture and results.</p>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-preview-stage" id="modalPreviewStage">
+          <!-- Dynamic Visual Preview Injected Here -->
+        </div>
+
+        <div class="modal-details-grid">
+          <div class="modal-detail-box">
+            <h4>The Challenge</h4>
+            <p id="modalChallenge">Client had slow load times, bounce rates exceeding 65%, and low checkout completions.</p>
+          </div>
+          <div class="modal-detail-box">
+            <h4>The Architecture</h4>
+            <p id="modalSolution">Engineered a zero-bundle-waste Next.js architecture with custom WebGL particle animations and headless API pipelines.</p>
+          </div>
+        </div>
+
+        <div class="modal-stats-row" id="modalStatsRow">
+          <!-- Injected dynamic metrics -->
+        </div>
+
+        <div class="modal-tech-box">
+          <h4>Technologies Deployed</h4>
+          <div class="modal-tech-tags" id="modalTechTags">
+            <!-- Dynamic tech tags -->
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-glass" id="modalDismissBtn">Close Window</button>
+        <a href="#contact" class="btn-primary-glow" id="modalHireBtn">
+          <span>Build Something Similar</span>
+          <span>→</span>
+        </a>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ADD PROJECT / ONGOING BUILD MODAL -->
+  <dialog id="addProjectModal" class="case-study-modal add-project-modal" aria-labelledby="addProjectTitle">
+    <div class="modal-dialog-content">
+      <button class="modal-close-btn" id="closeAddProjectBtn" aria-label="Close add project modal">✕</button>
+      
+      <div class="modal-header">
+        <div class="modal-badge-row">
+          <span class="modal-category" style="color: var(--accent-violet);">PROJECT ARCHIVE ENGINE</span>
+          <span class="modal-metric-chip" style="background: rgba(0,210,255,0.12); color: #0284C7;">+ LIVE UPDATE</span>
+        </div>
+        <h3 class="modal-title" id="addProjectTitle">Add Project or Ongoing Build</h3>
+        <p class="modal-lead">Publish a new showcase deliverable, ongoing client milestone, or active sprint build into the portfolio archive.</p>
+      </div>
+
+      <form id="addProjectForm" class="add-project-form" novalidate>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="newProjectName">Project Title *</label>
+            <input type="text" id="newProjectName" class="form-input" placeholder="e.g. Apex Health — AI Diagnostics Portal" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="newProjectCategory">Category *</label>
+            <select id="newProjectCategory" class="form-input form-select" required>
+              <option value="landing">Landing Pages</option>
+              <option value="fullstack">Full-Stack web site</option>
+              <option value="shopify">Shopify &amp; E-Commerce</option>
+              <option value="ongoing" selected>Projects On-going</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="newProjectDomain">Staging / Live URL</label>
+            <input type="text" id="newProjectDomain" class="form-input" placeholder="e.g. apex-ai.health or staging.app" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="newProjectFinishTime">Delivery / Finish Time</label>
+            <input type="text" id="newProjectFinishTime" class="form-input" placeholder="e.g. 1 Week / 3 Weeks / Active Sprint" />
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="newProjectMetric">Highlight Metric / Badge</label>
+            <input type="text" id="newProjectMetric" class="form-input" placeholder="e.g. 🚀 +185% Leads or 🔄 In Sprint" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="newProjectTech">Tech Stack (comma-separated)</label>
+            <input type="text" id="newProjectTech" class="form-input" placeholder="e.g. Next.js 15, PostgreSQL, Tailwind, Stripe" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="newProjectSummary">Executive Summary &amp; Description *</label>
+          <textarea id="newProjectSummary" class="form-input form-textarea" rows="3" placeholder="Briefly describe the business problem, architectural stack, and high-impact deliverable..." required></textarea>
+        </div>
+
+        <div class="modal-footer" style="padding-top: 20px; border-top: 1px solid var(--glass-border); margin-top: 24px; display: flex; justify-content: flex-end; gap: 14px;">
+          <button type="button" class="btn-glass" id="cancelAddProjectBtn">Cancel</button>
+          <button type="submit" class="btn-primary-glow" id="submitAddProjectBtn">
+            <span>Publish To Archive</span>
+            <span>+</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Main Application Script -->
+  <script src="app.js"></script>
+</body>
+</html>
