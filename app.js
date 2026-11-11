@@ -80,32 +80,265 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // =========================================================================
-  // 5. THIN OFFER NEWS TICKER INTERACTION
+  // 5. SECURITY & ADMIN PROTECTION ENGINE
   // =========================================================================
-  const tickerItems = document.querySelectorAll('.ticker-item');
-  tickerItems.forEach((item) => {
-    item.addEventListener('click', () => {
-      const offer = item.getAttribute('data-offer');
-      let targetService = 'Landing Page';
-      let promoNote = '';
 
-      if (offer === 'SHOPIFY20') {
-        targetService = 'Shopify Store';
-        promoNote = '[PROMO CODE: SHOPIFY20 APPLIED - Flat 20% Discount Activated]\n';
-      } else if (offer === 'LANDING5D') {
-        targetService = 'Landing Page';
-        promoNote = '[5-DAY SPRINT PRIORITY REQUESTED]\n';
-      } else if (offer === 'AIAPP') {
-        targetService = 'Full-Stack Web App';
-        promoNote = '[FULL-STACK + AI INTEGRATION INQUIRY]\n';
-      } else if (offer === 'AUDITFREE') {
-        targetService = 'Redesign / Other';
-        promoNote = '[FREE UI/UX & SPEED AUDIT COMPLIMENTARY REQUEST]\n';
+  /**
+   * Strict input sanitization stripping HTML tags, scripts, event handlers, and dangerous characters.
+   */
+  function sanitizeInput(str) {
+    if (typeof str !== 'string') return '';
+    return str
+      .replace(/<[^>]*>/g, '') // Strip all HTML tags
+      .replace(/javascript:/gi, '') // Strip javascript: URIs
+      .replace(/data:\s*text\/html/gi, '') // Strip data HTML
+      .replace(/on\w+\s*=/gi, '') // Strip inline event handlers
+      .replace(/[<>'"`]/g, (char) => {
+        switch (char) {
+          case '<': return '&lt;';
+          case '>': return '&gt;';
+          case "'": return '&#39;';
+          case '"': return '&quot;';
+          case '`': return '&#96;';
+          default: return char;
+        }
+      })
+      .trim();
+  }
+
+  /**
+   * Sanitizes names: allows only letters, spaces, hyphens, periods, and apostrophes.
+   */
+  function sanitizeName(name) {
+    return sanitizeInput(name).replace(/[^a-zA-Z\s\.\'\-]/g, '').trim();
+  }
+
+  /**
+   * Sanitizes address: strips dangerous symbols while preserving address syntax.
+   */
+  function sanitizeAddress(addr) {
+    return sanitizeInput(addr).replace(/[\<\>\{\}\[\]\\\|\^\`\~]/g, '').trim();
+  }
+
+  /**
+   * Validates Indian mobile and WhatsApp numbers (10 digits starting with 6-9, optional +91/91/0 prefix).
+   */
+  function isValidIndianPhone(phone) {
+    if (!phone || typeof phone !== 'string') return false;
+    const cleaned = phone.replace(/[\s\-\(\)\.]/g, '');
+    const indianRegex = /^(?:\+91|91|0)?[6-9]\d{9}$/;
+    return indianRegex.test(cleaned);
+  }
+
+  /**
+   * Normalizes a phone number for display/transmission.
+   */
+  function normalizeIndianPhone(phone) {
+    const cleaned = phone.replace(/[\s\-\(\)\.]/g, '');
+    const tenDigits = cleaned.slice(-10);
+    return `+91 ${tenDigits.slice(0, 5)} ${tenDigits.slice(5)}`;
+  }
+
+  /**
+   * Computes SHA-256 hash using Web Crypto API (crypto.subtle.digest).
+   */
+  async function computeSHA256(text) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  // Admin Security Configuration
+  // Default Passkey: "skynet2026"
+  const DEFAULT_ADMIN_HASH = '6b297cb1d136f0145cba3b8a665c76ca4a06e6411170d6b81fdb9410ea239cc4';
+  const ADMIN_SESSION_KEY = 'skynet_admin_session';
+  const ADMIN_SESSION_TIMEOUT_MS = 30 * 60 * 1000; // 30-minute inactivity timeout
+
+  function getExpectedAdminHash() {
+    return localStorage.getItem('skynet_admin_hash') || DEFAULT_ADMIN_HASH;
+  }
+
+  function isAdminAuthenticated() {
+    try {
+      const raw = sessionStorage.getItem(ADMIN_SESSION_KEY);
+      if (!raw) return false;
+      const session = JSON.parse(raw);
+      if (!session || !session.token || !session.timestamp) return false;
+      
+      const elapsed = Date.now() - session.timestamp;
+      if (elapsed > ADMIN_SESSION_TIMEOUT_MS) {
+        revokeAdminSession(true);
+        return false;
+      }
+      return session.token === getExpectedAdminHash();
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function touchAdminActivity() {
+    if (!isAdminAuthenticated()) return;
+    try {
+      const raw = sessionStorage.getItem(ADMIN_SESSION_KEY);
+      if (raw) {
+        const session = JSON.parse(raw);
+        session.timestamp = Date.now();
+        sessionStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify(session));
+      }
+    } catch (e) {}
+  }
+
+  window.addEventListener('click', touchAdminActivity);
+  window.addEventListener('keydown', touchAdminActivity);
+
+  function grantAdminSession(hash) {
+    sessionStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify({
+      token: hash,
+      timestamp: Date.now()
+    }));
+    document.body.classList.add('admin-mode');
+    const badge = document.getElementById('adminSessionBadge');
+    if (badge) badge.style.display = 'inline-flex';
+
+    // Refresh portfolio to reveal admin controls
+    const activeTab = document.querySelector('.filter-tab.active');
+    const activeFilter = activeTab ? activeTab.getAttribute('data-filter') : 'all';
+    renderPortfolio(activeFilter);
+    showNotificationToast('🛡️ Admin Mode Unlocked. Portfolio controls active.');
+  }
+
+  function revokeAdminSession(isTimeout = false) {
+    sessionStorage.removeItem(ADMIN_SESSION_KEY);
+    document.body.classList.remove('admin-mode');
+    const badge = document.getElementById('adminSessionBadge');
+    if (badge) badge.style.display = 'none';
+
+    if (addProjectModal && typeof addProjectModal.close === 'function' && addProjectModal.open) {
+      addProjectModal.close();
+      document.body.style.overflow = '';
+    }
+
+    const activeTab = document.querySelector('.filter-tab.active');
+    const activeFilter = activeTab ? activeTab.getAttribute('data-filter') : 'all';
+    renderPortfolio(activeFilter);
+
+    if (isTimeout) {
+      showNotificationToast('🔒 Admin session expired (30m inactivity).');
+    } else {
+      showNotificationToast('🔒 Admin session ended.');
+    }
+  }
+
+  // Periodic timeout check every 30 seconds
+  setInterval(() => {
+    if (sessionStorage.getItem(ADMIN_SESSION_KEY)) {
+      isAdminAuthenticated();
+    }
+  }, 30000);
+
+  // Initialize admin state on page load
+  if (isAdminAuthenticated()) {
+    document.body.classList.add('admin-mode');
+    const badge = document.getElementById('adminSessionBadge');
+    if (badge) badge.style.display = 'inline-flex';
+  }
+
+  // Admin Modal Elements
+  const adminAuthModal = document.getElementById('adminAuthModal');
+  const adminAuthForm = document.getElementById('adminAuthForm');
+  const adminPasskeyInput = document.getElementById('adminPasskeyInput');
+  const adminAuthError = document.getElementById('adminAuthError');
+  const adminAuthErrorText = document.getElementById('adminAuthErrorText');
+  const closeAdminAuthBtn = document.getElementById('closeAdminAuthBtn');
+  const cancelAdminAuthBtn = document.getElementById('cancelAdminAuthBtn');
+  const togglePasskeyVisibilityBtn = document.getElementById('togglePasskeyVisibilityBtn');
+  const adminLogoutBtn = document.getElementById('adminLogoutBtn');
+
+  function openAdminAuthModal() {
+    if (adminAuthModal) {
+      if (adminAuthError) adminAuthError.style.display = 'none';
+      if (adminPasskeyInput) adminPasskeyInput.value = '';
+      if (typeof adminAuthModal.showModal === 'function') {
+        adminAuthModal.showModal();
+      } else {
+        adminAuthModal.setAttribute('open', '');
+      }
+      document.body.style.overflow = 'hidden';
+      if (adminPasskeyInput) setTimeout(() => adminPasskeyInput.focus(), 80);
+    }
+  }
+
+  function closeAdminAuthModal() {
+    if (adminAuthModal) {
+      if (typeof adminAuthModal.close === 'function') {
+        adminAuthModal.close();
+      } else {
+        adminAuthModal.removeAttribute('open');
+      }
+      document.body.style.overflow = '';
+      if (adminPasskeyInput) adminPasskeyInput.value = '';
+    }
+  }
+
+  if (closeAdminAuthBtn) closeAdminAuthBtn.addEventListener('click', closeAdminAuthModal);
+  if (cancelAdminAuthBtn) cancelAdminAuthBtn.addEventListener('click', closeAdminAuthModal);
+  if (adminLogoutBtn) adminLogoutBtn.addEventListener('click', () => revokeAdminSession(false));
+
+  if (togglePasskeyVisibilityBtn && adminPasskeyInput) {
+    togglePasskeyVisibilityBtn.addEventListener('click', () => {
+      const isPassword = adminPasskeyInput.type === 'password';
+      adminPasskeyInput.type = isPassword ? 'text' : 'password';
+    });
+  }
+
+  if (adminAuthForm) {
+    adminAuthForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const enteredPasskey = adminPasskeyInput ? adminPasskeyInput.value.trim() : '';
+      if (!enteredPasskey) {
+        if (adminAuthError) {
+          adminAuthErrorText.textContent = 'Please enter the admin passkey.';
+          adminAuthError.style.display = 'flex';
+        }
+        return;
       }
 
-      // Pre-select service in form and scroll
-      preselectServiceInForm(targetService, promoNote);
+      // Hash passkey with SHA-256 via Web Crypto API
+      const enteredHash = await computeSHA256(enteredPasskey);
+      const expectedHash = getExpectedAdminHash();
+
+      if (enteredHash === expectedHash) {
+        closeAdminAuthModal();
+        grantAdminSession(enteredHash);
+        setTimeout(() => openAddModal(), 200);
+      } else {
+        if (adminAuthError) {
+          adminAuthErrorText.textContent = 'Invalid passkey. Access denied.';
+          adminAuthError.style.display = 'flex';
+          adminAuthError.classList.remove('shake-anim');
+          void adminAuthError.offsetWidth;
+          adminAuthError.classList.add('shake-anim');
+        }
+        if (adminPasskeyInput) {
+          adminPasskeyInput.value = '';
+          adminPasskeyInput.focus();
+        }
+      }
     });
+  }
+
+  // Secret Admin Shortcut: Ctrl + Shift + A or Cmd + Shift + A
+  window.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+      e.preventDefault();
+      if (isAdminAuthenticated()) {
+        openAddModal();
+      } else {
+        openAdminAuthModal();
+      }
+    }
   });
 
   // =========================================================================
@@ -170,6 +403,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         project.category === 'shopify' ? 'mockup-store' : 'mockup-dashboard';
 
     card.innerHTML = `
+      ${isAdminAuthenticated() && project.id && project.id.startsWith('project-') ? `
+        <button type="button" class="btn-delete-project" data-delete-id="${escapeHTML(project.id)}" title="Delete project (Admin only)">✕ Delete</button>
+      ` : ''}
       <div class="project-image-box">
         <div class="project-visual-mockup" style="background: linear-gradient(135deg, rgba(0,210,255,0.08), rgba(123,44,191,0.08));">
           <div class="mockup-screen">
@@ -338,6 +574,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const addProjectForm = document.getElementById('addProjectForm');
 
   function openAddModal() {
+    if (!isAdminAuthenticated()) {
+      openAdminAuthModal();
+      return;
+    }
+
     if (addProjectModal) {
       if (typeof addProjectModal.showModal === 'function') {
         addProjectModal.showModal();
@@ -384,7 +625,37 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Handle admin deletion of custom projects from portfolio grid
+  if (projectsGrid) {
+    projectsGrid.addEventListener('click', (e) => {
+      const deleteBtn = e.target.closest('.btn-delete-project');
+      if (deleteBtn) {
+        e.stopPropagation();
+        if (!isAdminAuthenticated()) {
+          openAdminAuthModal();
+          return;
+        }
+
+        const projectId = deleteBtn.getAttribute('data-delete-id');
+        if (!projectId) return;
+
+        if (confirm('Are you sure you want to permanently delete this project?')) {
+          touchAdminActivity();
+          let projects = getStoredProjects();
+          projects = projects.filter(p => p.id !== projectId);
+          saveStoredProjects(projects);
+
+          const activeTab = document.querySelector('.filter-tab.active');
+          const currentFilter = activeTab ? activeTab.getAttribute('data-filter') : 'all';
+          renderPortfolio(currentFilter);
+          showNotificationToast('✓ Project removed from archive.');
+        }
+      }
+    });
+  }
+
   function escapeHTML(str) {
+    if (typeof str !== 'string') return '';
     return str.replace(/[&<>'"]/g, 
       tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
     );
@@ -431,21 +702,36 @@ document.addEventListener('DOMContentLoaded', () => {
     addProjectForm.addEventListener('submit', (e) => {
       e.preventDefault();
 
-      const name = document.getElementById('newProjectName').value.trim();
-      const category = document.getElementById('newProjectCategory').value;
-      const domain = document.getElementById('newProjectDomain').value.trim() || 'project.skynet.dev';
-      const finishTime = document.getElementById('newProjectFinishTime').value.trim() || 'Active Sprint';
-      const metric = document.getElementById('newProjectMetric').value.trim() || '🚀 In Production';
-      const techInput = document.getElementById('newProjectTech').value.trim();
-      const summary = document.getElementById('newProjectSummary').value.trim();
+      if (!isAdminAuthenticated()) {
+        closeAddModal();
+        openAdminAuthModal();
+        return;
+      }
+
+      touchAdminActivity();
+
+      const rawName = document.getElementById('newProjectName').value.trim();
+      const rawCategory = document.getElementById('newProjectCategory').value;
+      const rawDomain = document.getElementById('newProjectDomain').value.trim() || 'project.skynet.dev';
+      const rawFinishTime = document.getElementById('newProjectFinishTime').value.trim() || 'Active Sprint';
+      const rawMetric = document.getElementById('newProjectMetric').value.trim() || '🚀 In Production';
+      const rawTechInput = document.getElementById('newProjectTech').value.trim();
+      const rawSummary = document.getElementById('newProjectSummary').value.trim();
+
+      const name = sanitizeInput(rawName);
+      const category = ['landing', 'fullstack', 'shopify', 'ongoing'].includes(rawCategory) ? rawCategory : 'landing';
+      const domain = sanitizeInput(rawDomain);
+      const finishTime = sanitizeInput(rawFinishTime);
+      const metric = sanitizeInput(rawMetric);
+      const summary = sanitizeInput(rawSummary);
 
       if (!name || !summary) {
         alert('Please provide at least a project title and description.');
         return;
       }
 
-      const techTags = techInput
-        ? techInput.split(',').map(t => t.trim()).filter(Boolean)
+      const techTags = rawTechInput
+        ? rawTechInput.split(',').map(t => sanitizeInput(t.trim())).filter(Boolean)
         : ['Next.js 15', 'Full-Stack', 'Tailwind'];
 
       const newProject = {
@@ -771,9 +1057,28 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // =========================================================================
-  // 10. CONTACT FORM PILLS & WHATSAPP ROUTING
+  // 10. CONTACT FORM PILLS, SECURITY CHECKS & WHATSAPP ROUTING
   // =========================================================================
   const ADMIN_WHATSAPP = "919942351777";
+  const RATE_LIMIT_COOLDOWN_MS = 60 * 1000; // 60 seconds cooldown
+
+  function getRemainingCooldown(key) {
+    try {
+      const last = parseInt(localStorage.getItem(key), 10);
+      if (!last || isNaN(last)) return 0;
+      const elapsed = Date.now() - last;
+      if (elapsed < RATE_LIMIT_COOLDOWN_MS) {
+        return Math.ceil((RATE_LIMIT_COOLDOWN_MS - elapsed) / 1000);
+      }
+    } catch (e) {}
+    return 0;
+  }
+
+  function setCooldownTimestamp(key) {
+    try {
+      localStorage.setItem(key, Date.now().toString());
+    } catch (e) {}
+  }
 
   const projectTypePills = document.querySelectorAll('#projectTypePills .pill-btn');
   const hiddenProjectType = document.getElementById('selectedProjectType');
@@ -796,19 +1101,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (isRoutingToWhatsApp) return;
 
+    // 1. Anti-Bot Honeypot Trap Check
+    const hpInput = document.getElementById('contact_hp_website');
+    if (hpInput && hpInput.value.trim() !== '') {
+      console.warn('Bot submission blocked via honeypot.');
+      return;
+    }
+
     const nameInput = document.getElementById('clientName');
     const contactInput = document.getElementById('clientContactNumber');
     const whatsappInput = document.getElementById('clientWhatsappNumber');
     const addressInput = document.getElementById('clientAddress');
     const errorBox = document.getElementById('contactFormError');
 
+    // 2. Client-Side Rate Limiting (60-second cooldown)
+    const remainingSec = getRemainingCooldown('skynet_contact_cooldown');
+    if (remainingSec > 0) {
+      if (errorBox) {
+        errorBox.textContent = `Security notice: Please wait ${remainingSec}s before sending another inquiry.`;
+        errorBox.style.display = 'block';
+      }
+      return;
+    }
+
     const activeType = document.querySelector('#projectTypePills .pill-btn.active');
     const selectedOption = activeType ? activeType.getAttribute('data-type') : (hiddenProjectType?.value || 'Landing Page');
 
-    const name = nameInput ? nameInput.value.trim() : '';
-    const contactNumber = contactInput ? contactInput.value.trim() : '';
-    const whatsappNumber = whatsappInput ? whatsappInput.value.trim() : '';
-    const address = addressInput ? addressInput.value.trim() : '';
+    const rawName = nameInput ? nameInput.value.trim() : '';
+    const rawContactNumber = contactInput ? contactInput.value.trim() : '';
+    const rawWhatsappNumber = whatsappInput ? whatsappInput.value.trim() : '';
+    const rawAddress = addressInput ? addressInput.value.trim() : '';
 
     // Clear previous field error states
     [nameInput, contactInput, whatsappInput, addressInput].forEach((input) => {
@@ -828,10 +1150,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Validate that all fields are filled
     const invalidFields = [];
-    if (!name && nameInput) invalidFields.push(nameInput);
-    if (!contactNumber && contactInput) invalidFields.push(contactInput);
-    if (!whatsappNumber && whatsappInput) invalidFields.push(whatsappInput);
-    if (!address && addressInput) invalidFields.push(addressInput);
+    if (!rawName && nameInput) invalidFields.push(nameInput);
+    if (!rawContactNumber && contactInput) invalidFields.push(contactInput);
+    if (!rawWhatsappNumber && whatsappInput) invalidFields.push(whatsappInput);
+    if (!rawAddress && addressInput) invalidFields.push(addressInput);
 
     if (invalidFields.length > 0) {
       invalidFields.forEach((field) => field.classList.add('field-error'));
@@ -843,6 +1165,46 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    // Validate Indian phone numbers (10 digits starting with 6-9)
+    if (!isValidIndianPhone(rawContactNumber)) {
+      if (contactInput) contactInput.classList.add('field-error');
+      if (errorBox) {
+        errorBox.textContent = 'Please enter a valid 10-digit Indian Contact Number (starting with 6-9).';
+        errorBox.style.display = 'block';
+      }
+      if (contactInput) contactInput.focus();
+      return;
+    }
+
+    if (!isValidIndianPhone(rawWhatsappNumber)) {
+      if (whatsappInput) whatsappInput.classList.add('field-error');
+      if (errorBox) {
+        errorBox.textContent = 'Please enter a valid 10-digit Indian WhatsApp Number (starting with 6-9).';
+        errorBox.style.display = 'block';
+      }
+      if (whatsappInput) whatsappInput.focus();
+      return;
+    }
+
+    // Sanitize user inputs against XSS and injection
+    const cleanName = sanitizeName(rawName);
+    const cleanAddress = sanitizeAddress(rawAddress);
+    const normalizedContact = normalizeIndianPhone(rawContactNumber);
+    const normalizedWhatsapp = normalizeIndianPhone(rawWhatsappNumber);
+
+    if (!cleanName) {
+      if (nameInput) nameInput.classList.add('field-error');
+      if (errorBox) {
+        errorBox.textContent = 'Please enter a valid name using letters and standard characters.';
+        errorBox.style.display = 'block';
+      }
+      if (nameInput) nameInput.focus();
+      return;
+    }
+
+    // Set rate limit cooldown upon passing validation
+    setCooldownTimestamp('skynet_contact_cooldown');
+
     isRoutingToWhatsApp = true;
     setTimeout(() => {
       isRoutingToWhatsApp = false;
@@ -851,12 +1213,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Dynamically construct the exact message string
     const message = `Hello Skynet Studios! New Project Inquiry:
 • Service Needed: ${selectedOption}
-• Name: ${name}
-• Contact Number: ${contactNumber}
-• WhatsApp Number: ${whatsappNumber}
-• Address: ${address}`;
+• Name: ${cleanName}
+• Contact Number: ${normalizedContact}
+• WhatsApp Number: ${normalizedWhatsapp}
+• Address: ${cleanAddress}`;
 
-    // URL-encode and open WhatsApp chat
+    // URL-encode and open WhatsApp chat with rel="noopener noreferrer"
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodedMessage}`;
 
@@ -991,23 +1353,44 @@ document.addEventListener('DOMContentLoaded', () => {
     feedbackForm.addEventListener('submit', (e) => {
       e.preventDefault();
 
+      // 1. Anti-Bot Honeypot Trap Check
+      const hpFeedback = document.getElementById('feedback_hp_website');
+      if (hpFeedback && hpFeedback.value.trim() !== '') {
+        console.warn('Bot feedback submission blocked via honeypot.');
+        return;
+      }
+
+      // 2. Client-Side Rate Limiting (60-second cooldown)
+      const remainingFeedbackSec = getRemainingCooldown('skynet_feedback_cooldown');
+      if (remainingFeedbackSec > 0) {
+        alert(`Security notice: Please wait ${remainingFeedbackSec}s before submitting more feedback.`);
+        return;
+      }
+
       const nameInput = document.getElementById('feedbackName');
       const msgInput = document.getElementById('feedbackMessage');
-      const name = nameInput ? nameInput.value.trim() : '';
-      const message = msgInput ? msgInput.value.trim() : '';
+      const rawName = nameInput ? nameInput.value.trim() : '';
+      const rawMessage = msgInput ? msgInput.value.trim() : '';
       const rating = hiddenStarRating ? hiddenStarRating.value : '5';
 
       let hasError = false;
-      if (!name) {
+      if (!rawName) {
         if (nameInput) nameInput.classList.add('field-error');
         hasError = true;
       }
-      if (!message) {
+      if (!rawMessage) {
         if (msgInput) msgInput.classList.add('field-error');
         hasError = true;
       }
 
       if (hasError) return;
+
+      // 3. Strict Sanitization
+      const name = sanitizeName(rawName) || sanitizeInput(rawName);
+      const message = sanitizeInput(rawMessage);
+
+      // Record rate limit timestamp
+      setCooldownTimestamp('skynet_feedback_cooldown');
 
       // Save to localStorage
       try {
@@ -1029,7 +1412,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (feedbackSuccessAlert) {
         feedbackSuccessAlert.innerHTML = `
           <span class="success-icon">✓</span>
-          <span>Thank you, <strong>${name}</strong>! Your ${rating}-star feedback has been recorded.</span>
+          <span>Thank you, <strong>${escapeHTML(name)}</strong>! Your ${escapeHTML(rating)}-star feedback has been recorded.</span>
           <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="feedback-wa-link">Share on WhatsApp →</a>
         `;
         feedbackSuccessAlert.style.display = 'flex';

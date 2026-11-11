@@ -1220,7 +1220,7 @@ h1, h2, h3, h4, h5 {
 }
 
 .btn-add-project {
-  display: inline-flex;
+  display: none !important; /* Hidden from public view by default (Security Gate) */
   align-items: center;
   gap: 8px;
   padding: 9px 20px;
@@ -1244,6 +1244,174 @@ h1, h2, h3, h4, h5 {
               box-shadow 0.25s ease,
               background-image 0.25s ease;
   white-space: nowrap;
+}
+
+body.admin-mode .btn-add-project {
+  display: inline-flex !important; /* Revealed when admin PIN is verified */
+}
+
+/* Admin Session Status Indicator Badge */
+.admin-session-badge {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #047857;
+  white-space: nowrap;
+}
+
+body.admin-mode .admin-session-badge {
+  display: inline-flex;
+}
+
+.admin-badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 6px #10B981;
+  animation: pulseBeacon 2s infinite;
+}
+
+.btn-admin-logout {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #DC2626;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  margin-left: 4px;
+  transition: all var(--trans-fast);
+}
+
+.btn-admin-logout:hover {
+  background: #DC2626;
+  color: #FFFFFF;
+}
+
+/* Admin Project Delete Control */
+.btn-delete-project {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(239, 68, 68, 0.92);
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35);
+  transition: transform var(--trans-fast), background-color var(--trans-fast);
+}
+
+.btn-delete-project:hover {
+  background: #B91C1C;
+  transform: scale(1.06);
+}
+
+/* Security Trap Honeypot */
+.hp-security-trap {
+  position: absolute !important;
+  left: -9999px !important;
+  top: -9999px !important;
+  width: 1px !important;
+  height: 1px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Admin Security Gate Modal */
+.admin-auth-dialog {
+  max-width: 480px;
+  padding: 36px 32px;
+}
+
+.passkey-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.passkey-input-wrapper .form-input {
+  padding-right: 44px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.08em;
+}
+
+.btn-toggle-passkey {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  transition: color var(--trans-fast);
+}
+
+.btn-toggle-passkey:hover {
+  color: var(--accent-cyan);
+}
+
+.admin-auth-error {
+  padding: 10px 14px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: var(--radius-md);
+  color: #DC2626;
+  font-size: 0.86rem;
+  font-weight: 600;
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-auth-error.shake-anim {
+  animation: authShake 0.4s ease;
+}
+
+@keyframes authShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+
+.admin-auth-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--glass-border);
+}
+
+.feedback-error-alert {
+  padding: 12px 16px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: var(--radius-md);
+  color: #DC2626;
+  font-size: 0.88rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .btn-add-project:hover {
