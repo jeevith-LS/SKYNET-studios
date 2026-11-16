@@ -3548,7 +3548,7 @@ body.admin-mode .admin-session-badge {
 
 /* ==========================================================================
    SKYNET STUDIOS // FULL-SCREEN ANIMATED SVG INTRO SPLASH SCREEN
-   Theme: Crisp Light Radial Backdrop & 4-Stage Geometric Reveal
+   Theme: Crisp Light Radial Backdrop & Massive Oversized 4-Stage Reveal
    ========================================================================== */
 
 body.intro-active {
@@ -3564,7 +3564,7 @@ body.intro-active {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at center, #FFFFFF 0%, #F8FAFC 55%, #F1F5F9 100%);
+  background: radial-gradient(circle at center, #FFFFFF 0%, #F8FAFC 52%, #F1F5F9 100%);
   user-select: none;
   opacity: 1;
   transform: scale(1);
@@ -3574,7 +3574,7 @@ body.intro-active {
 
 .skynet-intro-overlay.intro-dismissed {
   opacity: 0 !important;
-  transform: scale(1.04) !important;
+  transform: scale(1.1) !important;
   pointer-events: none !important;
   transition: opacity 0.8s ease, transform 0.8s ease !important;
 }
@@ -3583,23 +3583,24 @@ body.intro-active {
   display: none !important;
 }
 
-/* Ambient Radial Light Glow Behind Logo */
+/* Ambient Radial Light Glow Behind Massive Logo */
 .intro-ambient-glow {
   position: absolute;
-  width: 520px;
-  height: 520px;
+  width: clamp(560px, 85vw, 920px);
+  height: clamp(560px, 85vw, 920px);
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 210, 255, 0.16) 0%, rgba(123, 44, 191, 0.10) 45%, rgba(255, 255, 255, 0) 72%);
+  background: radial-gradient(circle, rgba(0, 210, 255, 0.22) 0%, rgba(123, 44, 191, 0.14) 45%, rgba(255, 255, 255, 0) 72%);
   pointer-events: none;
-  filter: blur(45px);
+  filter: blur(65px);
   transform: translate(-50%, -50%);
-  top: 46%;
+  top: 45%;
   left: 50%;
   z-index: 0;
-  opacity: 0.9;
+  opacity: 0.95;
   transition: opacity 0.6s ease;
 }
 
+/* Massive Oversized Content Container */
 .intro-content-container {
   position: relative;
   z-index: 1;
@@ -3608,8 +3609,11 @@ body.intro-active {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 24px;
-  max-width: 92vw;
+  padding: 32px 20px;
+  width: 90vw;
+  max-width: 800px;
+  transform: scale(1.15);
+  transform-origin: center center;
 }
 
 .intro-logo-stage {
@@ -3617,21 +3621,24 @@ body.intro-active {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
 }
 
+/* Massive Emblem Wrap */
 .intro-emblem-wrap {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 24px;
-  filter: drop-shadow(0 12px 28px rgba(0, 180, 216, 0.14));
+  margin-bottom: 28px;
+  filter: drop-shadow(0 20px 48px rgba(0, 180, 216, 0.22)) drop-shadow(0 8px 24px rgba(123, 44, 191, 0.16));
 }
 
 .intro-brandmark-svg {
   display: block;
-  width: 150px;
-  height: 122px;
+  width: clamp(260px, 42vw, 420px);
+  height: auto;
+  aspect-ratio: 54 / 44;
   overflow: visible;
 }
 
@@ -3678,7 +3685,7 @@ body.intro-active {
   0% {
     clip-path: inset(100% 0 0 0);
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(12px);
   }
   20% {
     opacity: 1;
@@ -3715,31 +3722,33 @@ body.intro-active {
 
 /* --------------------------------------------------------------------------
    STAGE 3 (1.5s – 2.5s) — Letter-by-Letter Staggered Wordmark Reveal
-   Each letter slides up 14px, fading from 0 to 1 with 120ms sequential stagger
+   Massive bold letters sliding up 14px with 120ms sequential stagger
    -------------------------------------------------------------------------- */
 .intro-wordmark-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 4px;
+  margin-top: 6px;
+  width: 100%;
 }
 
 .intro-wordmark-title {
   margin: 0;
   font-family: var(--font-display, 'Orbitron', 'Space Grotesk', sans-serif);
-  font-size: clamp(2.3rem, 6vw, 3.4rem);
+  font-size: clamp(3.2rem, 9.5vw, 6.2rem);
   font-weight: 900;
-  letter-spacing: 0.20em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #0F172A;
   background: linear-gradient(180deg, #0F172A 0%, #1E293B 55%, #334155 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  line-height: 1.1;
+  line-height: 1.05;
   display: flex;
   align-items: center;
   justify-content: center;
+  filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.08));
 }
 
 .intro-char {
@@ -3764,7 +3773,7 @@ body.intro-active {
   0% {
     opacity: 0;
     transform: translateY(14px);
-    filter: blur(5px);
+    filter: blur(6px);
   }
   100% {
     opacity: 1;
@@ -3774,17 +3783,17 @@ body.intro-active {
 }
 
 .intro-wordmark-sub {
-  margin-top: 8px;
+  margin-top: 14px;
   font-family: 'Space Grotesk', 'Montserrat', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.36em;
+  font-size: clamp(14px, 2.2vw, 20px);
+  font-weight: 800;
+  letter-spacing: 0.45em;
   text-transform: uppercase;
   color: #0284C7;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 12px;
   opacity: 0;
   transform: translateY(8px);
   will-change: transform, opacity;
@@ -3798,25 +3807,25 @@ body.intro-active {
   0% {
     opacity: 0;
     transform: translateY(8px);
-    letter-spacing: 0.52em;
+    letter-spacing: 0.60em;
   }
   100% {
-    opacity: 0.9;
+    opacity: 0.95;
     transform: translateY(0);
-    letter-spacing: 0.36em;
+    letter-spacing: 0.45em;
   }
 }
 
 /* --------------------------------------------------------------------------
-   STAGE 4 (2.6s – 3.2s) — Shimmer Pulse & Smooth Page Entry
+   STAGE 4 (2.6s – 3.2s) — Shimmer Pulse Across Oversized Logo
    -------------------------------------------------------------------------- */
 .intro-shimmer-sweep {
   position: absolute;
-  top: -25px;
-  left: -40px;
-  right: -40px;
-  bottom: -25px;
-  background: linear-gradient(110deg, transparent 25%, rgba(0, 210, 255, 0.25) 42%, rgba(255, 255, 255, 0.95) 50%, rgba(124, 58, 237, 0.28) 58%, transparent 75%);
+  top: -40px;
+  left: -60px;
+  right: -60px;
+  bottom: -40px;
+  background: linear-gradient(110deg, transparent 20%, rgba(0, 210, 255, 0.32) 40%, rgba(255, 255, 255, 0.98) 50%, rgba(124, 58, 237, 0.34) 60%, transparent 80%);
   opacity: 0;
   pointer-events: none;
   transform: translateX(-180%) skewX(-25deg);
@@ -3824,7 +3833,7 @@ body.intro-active {
 }
 
 .skynet-intro-overlay.animating .intro-shimmer-sweep {
-  animation: introShimmerPulse 0.75s ease-in-out 2.6s forwards;
+  animation: introShimmerPulse 0.6s ease-in-out 2.6s forwards;
 }
 
 @keyframes introShimmerPulse {
@@ -3832,7 +3841,7 @@ body.intro-active {
     opacity: 0;
     transform: translateX(-180%) skewX(-25deg);
   }
-  35% {
+  40% {
     opacity: 1;
   }
   100% {
@@ -3842,38 +3851,42 @@ body.intro-active {
 }
 
 .skynet-intro-overlay.animating .intro-emblem-wrap {
-  animation: introEmblemGlowPulse 0.65s ease-in-out 2.6s forwards;
+  animation: introEmblemGlowPulse 0.6s ease-in-out 2.6s forwards;
 }
 
 @keyframes introEmblemGlowPulse {
   0% {
-    filter: drop-shadow(0 12px 28px rgba(0, 180, 216, 0.14));
+    filter: drop-shadow(0 20px 48px rgba(0, 180, 216, 0.22));
   }
-  45% {
-    filter: drop-shadow(0 0 28px rgba(0, 210, 255, 0.55)) drop-shadow(0 0 46px rgba(124, 58, 237, 0.40));
-    transform: scale(1.025);
+  50% {
+    filter: drop-shadow(0 0 45px rgba(0, 210, 255, 0.65)) drop-shadow(0 0 70px rgba(124, 58, 237, 0.45));
+    transform: scale(1.03);
   }
   100% {
-    filter: drop-shadow(0 12px 28px rgba(0, 180, 216, 0.18));
+    filter: drop-shadow(0 20px 48px rgba(0, 180, 216, 0.22));
     transform: scale(1);
   }
 }
 
 @media (max-width: 640px) {
+  .intro-content-container {
+    transform: scale(1);
+    padding: 20px 14px;
+  }
   .intro-brandmark-svg {
-    width: 120px;
-    height: 98px;
+    width: clamp(200px, 60vw, 280px);
   }
   .intro-wordmark-title {
-    font-size: 2.1rem;
-    letter-spacing: 0.16em;
+    font-size: clamp(2.4rem, 12vw, 3.4rem);
+    letter-spacing: 0.14em;
   }
   .intro-wordmark-sub {
-    font-size: 11px;
-    letter-spacing: 0.28em;
+    font-size: 12px;
+    letter-spacing: 0.32em;
+    gap: 8px;
   }
   .intro-ambient-glow {
-    width: 320px;
-    height: 320px;
+    width: 380px;
+    height: 380px;
   }
 }
