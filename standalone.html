@@ -3593,7 +3593,7 @@ body.intro-active {
   user-select: none;
   opacity: 1;
   transform: scale(1);
-  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.8s ease, transform 0.8s ease;
   overflow: hidden;
 }
 
@@ -3601,7 +3601,7 @@ body.intro-active {
   opacity: 0 !important;
   transform: scale(1.04) !important;
   pointer-events: none !important;
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transition: opacity 0.8s ease, transform 0.8s ease !important;
 }
 
 .skynet-intro-overlay.intro-hidden {
@@ -3884,96 +3884,6 @@ body.intro-active {
   }
 }
 
-/* --------------------------------------------------------------------------
-   Interactive Controls Bar (Fades in right as wordmark completes ~2.35s)
-   -------------------------------------------------------------------------- */
-.intro-controls-bar {
-  margin-top: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  opacity: 0;
-  transform: translateY(12px);
-  will-change: opacity, transform;
-}
-
-.skynet-intro-overlay.animating .intro-controls-bar {
-  animation: introControlsFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 2.35s forwards;
-}
-
-@keyframes introControlsFadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.intro-btn-replay,
-.intro-btn-enter {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-sans);
-  font-size: 0.85rem;
-  font-weight: 600;
-  border-radius: 9999px;
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  outline: none;
-}
-
-.intro-btn-replay {
-  padding: 8px 18px;
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid rgba(203, 213, 225, 0.9);
-  color: #475569;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-  backdrop-filter: blur(8px);
-}
-
-.intro-btn-replay:hover {
-  background: #FFFFFF;
-  color: #0284C7;
-  border-color: rgba(2, 132, 199, 0.45);
-  transform: translateY(-1.5px);
-  box-shadow: 0 6px 16px rgba(0, 180, 216, 0.15);
-}
-
-.intro-btn-replay svg {
-  transition: transform 0.4s ease;
-}
-
-.intro-btn-replay:hover svg {
-  transform: rotate(-180deg);
-}
-
-.intro-btn-enter {
-  padding: 8px 20px;
-  background: linear-gradient(135deg, #00D2FF 0%, #0284C7 50%, #7C3AED 100%);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  color: #FFFFFF;
-  box-shadow: 0 4px 16px rgba(0, 180, 216, 0.30);
-}
-
-.intro-btn-enter:hover {
-  transform: translateY(-1.5px);
-  box-shadow: 0 8px 24px rgba(0, 180, 216, 0.45), 0 0 16px rgba(124, 58, 237, 0.35);
-  filter: brightness(1.05);
-}
-
-.intro-btn-enter svg {
-  transition: transform 0.25s ease;
-}
-
-.intro-btn-enter:hover svg {
-  transform: translateX(3px);
-}
-
 @media (max-width: 640px) {
   .intro-brandmark-svg {
     width: 120px;
@@ -3990,9 +3900,6 @@ body.intro-active {
   .intro-ambient-glow {
     width: 320px;
     height: 320px;
-  }
-  .intro-controls-bar {
-    margin-top: 26px;
   }
 }
 
@@ -4091,23 +3998,6 @@ body.intro-active {
           </div>
         </div>
 
-      </div>
-
-      <!-- Interactive Controls Bar (Fades in right after wordmark ~2.35s) -->
-      <div class="intro-controls-bar">
-        <button type="button" class="intro-btn-replay" id="introReplayBtn" title="Replay intro animation">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
-          </svg>
-          <span>Replay</span>
-        </button>
-        <button type="button" class="intro-btn-enter" id="introEnterBtn" title="Enter Skynet Studios">
-          <span>Enter Studio</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-            <polyline points="12 5 19 12 12 19"></polyline>
-          </svg>
-        </button>
       </div>
 
     </div>
@@ -5296,17 +5186,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // =========================================================================
   // 0. FULL-SCREEN ANIMATED SVG INTRO SPLASH SCREEN ENGINE
-  // Staged geometric reveal:
-  // Stage 1 (0.0s – 0.9s): Spire Base Reveal (clip-path rising vertically)
+  // Hands-free staged geometric choreography:
+  // Stage 1 (0.0s – 0.9s): Geometric Spire Base Reveal (clip-path rising vertically)
   // Stage 2 (0.8s – 1.5s): Center Needle Spire & Horizon Arch Sweep (left to right)
   // Stage 3 (1.5s – 2.5s): Letter-by-Letter Staggered Wordmark ("SKYNET" + "— STUDIOS —")
-  // Stage 4 (2.6s – 3.2s): Bright Radial Light Shimmer Pulse & Page Reveal
+  // Stage 4 (2.6s – 3.2s): Bright Radial Light Shimmer Pulse (hold 400ms)
+  // Exact 3.2s mark: Seamless hands-free auto-transition to main site (0.8s ease fade & scale)
   // =========================================================================
   const introLoader = document.getElementById('skynet-intro-loader');
-  const introReplayBtn = document.getElementById('introReplayBtn');
-  const introEnterBtn = document.getElementById('introEnterBtn');
-  const brandLogo = document.getElementById('brandLogo');
-
   let introAutoDismissTimer = null;
   let isIntroDismissed = false;
 
@@ -5319,84 +5206,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (introLoader) {
+      // 1. Immediately trigger 0.8s ease fade & scale out
       introLoader.classList.add('intro-dismissed');
+
+      // 2. Immediately restore scrolling to body the exact moment Stage 4 concludes
       document.body.classList.remove('intro-active');
       document.body.style.overflow = '';
+      document.body.style.overflowY = 'auto';
 
+      // 3. Remove loader completely from viewport after 0.8s transition
       setTimeout(() => {
         introLoader.classList.add('intro-hidden');
-      }, 650);
+        if (introLoader.parentNode) {
+          introLoader.parentNode.removeChild(introLoader);
+        }
+      }, 820);
     }
   }
 
-  function replaySkynetIntro() {
-    if (!introLoader) return;
-    if (introAutoDismissTimer) {
-      clearTimeout(introAutoDismissTimer);
-      introAutoDismissTimer = null;
-    }
-
-    isIntroDismissed = false;
+  // Hands-free auto-transition scheduled for the exact moment Stage 4 concludes (3.2s)
+  if (introLoader) {
     document.body.classList.add('intro-active');
     document.body.style.overflow = 'hidden';
-
-    introLoader.classList.remove('intro-hidden', 'intro-dismissed');
-    introLoader.classList.remove('animating');
-
-    // Force DOM reflow to restart CSS keyframe animations from 0.0s
-    void introLoader.offsetWidth;
-
-    introLoader.classList.add('animating');
-
-    // Auto-transition into main studio after ~3.5s if untouched (~1.2s post-wordmark)
     introAutoDismissTimer = setTimeout(() => {
       dismissSkynetIntro();
-    }, 3500);
+    }, 3200);
   }
 
-  // Interactive Controls (Zero inline JS / strict CSP compliant)
-  if (introEnterBtn) {
-    introEnterBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      dismissSkynetIntro();
-    });
-  }
-
-  if (introReplayBtn) {
-    introReplayBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      replaySkynetIntro();
-    });
-  }
-
-  // Accessibility: Escape key skips intro immediately
+  // Keyboard accessibility: Escape key skips immediately into main site
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !isIntroDismissed) {
       dismissSkynetIntro();
     }
   });
 
-  // Replay anytime when clicking top navbar brand logo
-  if (brandLogo) {
-    brandLogo.addEventListener('click', (e) => {
-      if (window.scrollY < 100) {
-        e.preventDefault();
-        replaySkynetIntro();
-      }
-    });
-  }
-
-  // Start initial auto-dismiss timer (~3.5s total duration)
-  if (introLoader) {
-    document.body.classList.add('intro-active');
-    introAutoDismissTimer = setTimeout(() => {
-      dismissSkynetIntro();
-    }, 3500);
-  }
-
-  // Global handle for programmatic replay or debugging
+  // Global handle for programmatic access or verification
   window.skynetIntro = {
-    replay: replaySkynetIntro,
     dismiss: dismissSkynetIntro
   };
 

@@ -3568,7 +3568,7 @@ body.intro-active {
   user-select: none;
   opacity: 1;
   transform: scale(1);
-  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.8s ease, transform 0.8s ease;
   overflow: hidden;
 }
 
@@ -3576,7 +3576,7 @@ body.intro-active {
   opacity: 0 !important;
   transform: scale(1.04) !important;
   pointer-events: none !important;
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transition: opacity 0.8s ease, transform 0.8s ease !important;
 }
 
 .skynet-intro-overlay.intro-hidden {
@@ -3859,96 +3859,6 @@ body.intro-active {
   }
 }
 
-/* --------------------------------------------------------------------------
-   Interactive Controls Bar (Fades in right as wordmark completes ~2.35s)
-   -------------------------------------------------------------------------- */
-.intro-controls-bar {
-  margin-top: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  opacity: 0;
-  transform: translateY(12px);
-  will-change: opacity, transform;
-}
-
-.skynet-intro-overlay.animating .intro-controls-bar {
-  animation: introControlsFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 2.35s forwards;
-}
-
-@keyframes introControlsFadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.intro-btn-replay,
-.intro-btn-enter {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-sans);
-  font-size: 0.85rem;
-  font-weight: 600;
-  border-radius: 9999px;
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  outline: none;
-}
-
-.intro-btn-replay {
-  padding: 8px 18px;
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid rgba(203, 213, 225, 0.9);
-  color: #475569;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-  backdrop-filter: blur(8px);
-}
-
-.intro-btn-replay:hover {
-  background: #FFFFFF;
-  color: #0284C7;
-  border-color: rgba(2, 132, 199, 0.45);
-  transform: translateY(-1.5px);
-  box-shadow: 0 6px 16px rgba(0, 180, 216, 0.15);
-}
-
-.intro-btn-replay svg {
-  transition: transform 0.4s ease;
-}
-
-.intro-btn-replay:hover svg {
-  transform: rotate(-180deg);
-}
-
-.intro-btn-enter {
-  padding: 8px 20px;
-  background: linear-gradient(135deg, #00D2FF 0%, #0284C7 50%, #7C3AED 100%);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  color: #FFFFFF;
-  box-shadow: 0 4px 16px rgba(0, 180, 216, 0.30);
-}
-
-.intro-btn-enter:hover {
-  transform: translateY(-1.5px);
-  box-shadow: 0 8px 24px rgba(0, 180, 216, 0.45), 0 0 16px rgba(124, 58, 237, 0.35);
-  filter: brightness(1.05);
-}
-
-.intro-btn-enter svg {
-  transition: transform 0.25s ease;
-}
-
-.intro-btn-enter:hover svg {
-  transform: translateX(3px);
-}
-
 @media (max-width: 640px) {
   .intro-brandmark-svg {
     width: 120px;
@@ -3965,8 +3875,5 @@ body.intro-active {
   .intro-ambient-glow {
     width: 320px;
     height: 320px;
-  }
-  .intro-controls-bar {
-    margin-top: 26px;
   }
 }
