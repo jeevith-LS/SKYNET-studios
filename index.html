@@ -24,7 +24,120 @@
   
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="light-theme">
+<body class="light-theme intro-active">
+
+  <!-- =========================================================================
+       SKYNET STUDIOS // FULL-SCREEN ANIMATED SVG INTRO SPLASH SCREEN
+       ========================================================================= -->
+  <div id="skynet-intro-loader" class="skynet-intro-overlay animating" role="dialog" aria-modal="true" aria-label="Skynet Studios Introduction">
+    <!-- Ambient Radial Light Glow Behind Logo -->
+    <div class="intro-ambient-glow" aria-hidden="true"></div>
+
+    <div class="intro-content-container">
+      <div class="intro-logo-stage">
+        
+        <!-- Animated SVG Emblem -->
+        <div class="intro-emblem-wrap">
+          <svg width="150" height="122" viewBox="0 0 54 44" fill="none" xmlns="http://www.w3.org/2000/svg" class="intro-brandmark-svg" aria-hidden="true">
+            <defs>
+              <!-- Vivid Electric Cyan to Royal Blue Gradient (Left Facets) -->
+              <linearGradient id="introSpireCyanBlue" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#00D2FF"/>
+                <stop offset="45%" stop-color="#0284C7"/>
+                <stop offset="100%" stop-color="#2563EB"/>
+              </linearGradient>
+              <!-- Vivid Indigo to Rich Violet Gradient (Right Facets) -->
+              <linearGradient id="introSpireViolet" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#6366F1"/>
+                <stop offset="60%" stop-color="#7C3AED"/>
+                <stop offset="100%" stop-color="#9333EA"/>
+              </linearGradient>
+              <!-- Sweeping Curved Horizon Arch Gradient -->
+              <linearGradient id="introArchGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#00D2FF"/>
+                <stop offset="30%" stop-color="#0284C7"/>
+                <stop offset="70%" stop-color="#6366F1"/>
+                <stop offset="100%" stop-color="#9333EA"/>
+              </linearGradient>
+            </defs>
+
+            <!-- STAGE 1 (0.0s – 0.9s): Outer Geometric Skyline Spires (Rise from baseline) -->
+            <g class="intro-spires-stage1">
+              <!-- 1. Outer Left Spire -->
+              <polygon points="15,20 12,23 12,30 14,30" fill="url(#introSpireCyanBlue)"/>
+              <polygon points="15,20 14,30 16.5,30 16.5,22" fill="url(#introSpireViolet)"/>
+
+              <!-- 2. Inner Left Spire -->
+              <polygon points="21,13 18,17 18,30 20,30" fill="url(#introSpireCyanBlue)"/>
+              <polygon points="21,13 20,30 22.5,30 22.5,15.5" fill="url(#introSpireViolet)"/>
+
+              <!-- 4. Inner Right Spire -->
+              <polygon points="33,13 31.5,15.5 31.5,30 34,30" fill="url(#introSpireCyanBlue)"/>
+              <polygon points="33,13 34,30 36,30 36,17" fill="url(#introSpireViolet)"/>
+
+              <!-- 5. Outer Right Spire -->
+              <polygon points="39,20 37.5,22 37.5,30 40,30" fill="url(#introSpireCyanBlue)"/>
+              <polygon points="39,20 40,30 42,30 42,23" fill="url(#introSpireViolet)"/>
+            </g>
+
+            <!-- STAGE 2A (0.8s – 1.5s): Center Needle Spire & Apex Tip (Rise & sweep apex to tip) -->
+            <g class="intro-center-needle-stage2">
+              <line x1="27" y1="2" x2="27" y2="8" stroke="#0284C7" stroke-width="1.3" stroke-linecap="round"/>
+              <circle cx="27" cy="2" r="1.3" fill="#00D2FF" stroke="#0284C7" stroke-width="0.5"/>
+              <polygon points="27,7.5 24,12.5 24,30 27,30" fill="url(#introSpireCyanBlue)"/>
+              <polygon points="27,7.5 27,30 30,30 30,12.5" fill="url(#introSpireViolet)"/>
+              <line x1="27" y1="7.5" x2="27" y2="30" stroke="#FFFFFF" stroke-width="0.8" opacity="0.95"/>
+            </g>
+
+            <!-- STAGE 2B (0.85s – 1.5s): Curved Planetary Horizon Arch (Left to right sweep) -->
+            <g class="intro-horizon-arch-stage2">
+              <path d="M 6 34.5 Q 27 28 48 34.5 Q 27 30.5 6 34.5 Z" fill="url(#introArchGrad)"/>
+              <path d="M 11 33.6 Q 27 28.5 43 33.6" stroke="#FFFFFF" stroke-width="0.9" stroke-linecap="round" opacity="0.95"/>
+            </g>
+          </svg>
+
+          <!-- STAGE 4 (2.6s – 3.2s): Bright Radial Light Shimmer Pulse -->
+          <div class="intro-shimmer-sweep" aria-hidden="true"></div>
+        </div>
+
+        <!-- STAGE 3 (1.5s – 2.5s): Letter-by-Letter Staggered Wordmark Reveal -->
+        <div class="intro-wordmark-wrap">
+          <h1 class="intro-wordmark-title" aria-label="SKYNET">
+            <span class="intro-char" data-char="0">S</span>
+            <span class="intro-char" data-char="1">K</span>
+            <span class="intro-char" data-char="2">Y</span>
+            <span class="intro-char" data-char="3">N</span>
+            <span class="intro-char" data-char="4">E</span>
+            <span class="intro-char" data-char="5">T</span>
+          </h1>
+          <div class="intro-wordmark-sub">
+            <span class="sub-dash">—</span>
+            <span class="sub-text">STUDIOS</span>
+            <span class="sub-dash">—</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Interactive Controls Bar (Fades in right after wordmark ~2.35s) -->
+      <div class="intro-controls-bar">
+        <button type="button" class="intro-btn-replay" id="introReplayBtn" title="Replay intro animation">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+          </svg>
+          <span>Replay</span>
+        </button>
+        <button type="button" class="intro-btn-enter" id="introEnterBtn" title="Enter Skynet Studios">
+          <span>Enter Studio</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
 
   <!-- Base Layer: Interactive Multicolored Aurora Canvas -->
   <canvas id="auroraCanvas" class="aurora-canvas" aria-hidden="true"></canvas>

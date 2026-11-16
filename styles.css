@@ -3545,3 +3545,428 @@ body.admin-mode .admin-session-badge {
     border-radius: var(--radius-md);
   }
 }
+
+/* ==========================================================================
+   SKYNET STUDIOS // FULL-SCREEN ANIMATED SVG INTRO SPLASH SCREEN
+   Theme: Crisp Light Radial Backdrop & 4-Stage Geometric Reveal
+   ========================================================================== */
+
+body.intro-active {
+  overflow: hidden !important;
+  height: 100vh !important;
+}
+
+.skynet-intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, #FFFFFF 0%, #F8FAFC 55%, #F1F5F9 100%);
+  user-select: none;
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.skynet-intro-overlay.intro-dismissed {
+  opacity: 0 !important;
+  transform: scale(1.04) !important;
+  pointer-events: none !important;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.skynet-intro-overlay.intro-hidden {
+  display: none !important;
+}
+
+/* Ambient Radial Light Glow Behind Logo */
+.intro-ambient-glow {
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 210, 255, 0.16) 0%, rgba(123, 44, 191, 0.10) 45%, rgba(255, 255, 255, 0) 72%);
+  pointer-events: none;
+  filter: blur(45px);
+  transform: translate(-50%, -50%);
+  top: 46%;
+  left: 50%;
+  z-index: 0;
+  opacity: 0.9;
+  transition: opacity 0.6s ease;
+}
+
+.intro-content-container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  max-width: 92vw;
+}
+
+.intro-logo-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.intro-emblem-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  filter: drop-shadow(0 12px 28px rgba(0, 180, 216, 0.14));
+}
+
+.intro-brandmark-svg {
+  display: block;
+  width: 150px;
+  height: 122px;
+  overflow: visible;
+}
+
+/* --------------------------------------------------------------------------
+   STAGE 1 (0.0s – 0.9s) — Geometric Spire Base Reveal
+   Outer geometric spires rising vertically from baseline with sharp cubic-bezier
+   -------------------------------------------------------------------------- */
+.intro-spires-stage1 {
+  clip-path: inset(100% 0 0 0);
+  will-change: clip-path;
+}
+
+.skynet-intro-overlay.animating .intro-spires-stage1 {
+  animation: introSpireRise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.05s forwards;
+}
+
+@keyframes introSpireRise {
+  0% {
+    clip-path: inset(100% 0 0 0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   STAGE 2 (0.8s – 1.5s) — Center Needle Spire & Horizon Arch Sweep
+   -------------------------------------------------------------------------- */
+.intro-center-needle-stage2 {
+  clip-path: inset(100% 0 0 0);
+  will-change: clip-path, transform;
+}
+
+.skynet-intro-overlay.animating .intro-center-needle-stage2 {
+  animation: introCenterNeedleRise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.8s forwards;
+}
+
+@keyframes introCenterNeedleRise {
+  0% {
+    clip-path: inset(100% 0 0 0);
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.intro-horizon-arch-stage2 {
+  clip-path: inset(0 100% 0 0);
+  will-change: clip-path;
+}
+
+.skynet-intro-overlay.animating .intro-horizon-arch-stage2 {
+  animation: introArchSweep 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.85s forwards;
+}
+
+@keyframes introArchSweep {
+  0% {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   STAGE 3 (1.5s – 2.5s) — Letter-by-Letter Staggered Wordmark Reveal
+   Each letter slides up 14px, fading from 0 to 1 with 120ms sequential stagger
+   -------------------------------------------------------------------------- */
+.intro-wordmark-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.intro-wordmark-title {
+  margin: 0;
+  font-family: var(--font-display, 'Orbitron', 'Space Grotesk', sans-serif);
+  font-size: clamp(2.3rem, 6vw, 3.4rem);
+  font-weight: 900;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: #0F172A;
+  background: linear-gradient(180deg, #0F172A 0%, #1E293B 55%, #334155 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.intro-char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(14px);
+  will-change: transform, opacity, filter;
+}
+
+.skynet-intro-overlay.animating .intro-char {
+  animation: introLetterSlideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.skynet-intro-overlay.animating .intro-char[data-char="0"] { animation-delay: 1.50s; }
+.skynet-intro-overlay.animating .intro-char[data-char="1"] { animation-delay: 1.62s; }
+.skynet-intro-overlay.animating .intro-char[data-char="2"] { animation-delay: 1.74s; }
+.skynet-intro-overlay.animating .intro-char[data-char="3"] { animation-delay: 1.86s; }
+.skynet-intro-overlay.animating .intro-char[data-char="4"] { animation-delay: 1.98s; }
+.skynet-intro-overlay.animating .intro-char[data-char="5"] { animation-delay: 2.10s; }
+
+@keyframes introLetterSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0px);
+  }
+}
+
+.intro-wordmark-sub {
+  margin-top: 8px;
+  font-family: 'Space Grotesk', 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: #0284C7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(8px);
+  will-change: transform, opacity;
+}
+
+.skynet-intro-overlay.animating .intro-wordmark-sub {
+  animation: introSubSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 2.25s forwards;
+}
+
+@keyframes introSubSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+    letter-spacing: 0.52em;
+  }
+  100% {
+    opacity: 0.9;
+    transform: translateY(0);
+    letter-spacing: 0.36em;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   STAGE 4 (2.6s – 3.2s) — Shimmer Pulse & Smooth Page Entry
+   -------------------------------------------------------------------------- */
+.intro-shimmer-sweep {
+  position: absolute;
+  top: -25px;
+  left: -40px;
+  right: -40px;
+  bottom: -25px;
+  background: linear-gradient(110deg, transparent 25%, rgba(0, 210, 255, 0.25) 42%, rgba(255, 255, 255, 0.95) 50%, rgba(124, 58, 237, 0.28) 58%, transparent 75%);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-180%) skewX(-25deg);
+  will-change: transform, opacity;
+}
+
+.skynet-intro-overlay.animating .intro-shimmer-sweep {
+  animation: introShimmerPulse 0.75s ease-in-out 2.6s forwards;
+}
+
+@keyframes introShimmerPulse {
+  0% {
+    opacity: 0;
+    transform: translateX(-180%) skewX(-25deg);
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(180%) skewX(-25deg);
+  }
+}
+
+.skynet-intro-overlay.animating .intro-emblem-wrap {
+  animation: introEmblemGlowPulse 0.65s ease-in-out 2.6s forwards;
+}
+
+@keyframes introEmblemGlowPulse {
+  0% {
+    filter: drop-shadow(0 12px 28px rgba(0, 180, 216, 0.14));
+  }
+  45% {
+    filter: drop-shadow(0 0 28px rgba(0, 210, 255, 0.55)) drop-shadow(0 0 46px rgba(124, 58, 237, 0.40));
+    transform: scale(1.025);
+  }
+  100% {
+    filter: drop-shadow(0 12px 28px rgba(0, 180, 216, 0.18));
+    transform: scale(1);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Interactive Controls Bar (Fades in right as wordmark completes ~2.35s)
+   -------------------------------------------------------------------------- */
+.intro-controls-bar {
+  margin-top: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  opacity: 0;
+  transform: translateY(12px);
+  will-change: opacity, transform;
+}
+
+.skynet-intro-overlay.animating .intro-controls-bar {
+  animation: introControlsFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 2.35s forwards;
+}
+
+@keyframes introControlsFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.intro-btn-replay,
+.intro-btn-enter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+}
+
+.intro-btn-replay {
+  padding: 8px 18px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(203, 213, 225, 0.9);
+  color: #475569;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(8px);
+}
+
+.intro-btn-replay:hover {
+  background: #FFFFFF;
+  color: #0284C7;
+  border-color: rgba(2, 132, 199, 0.45);
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 16px rgba(0, 180, 216, 0.15);
+}
+
+.intro-btn-replay svg {
+  transition: transform 0.4s ease;
+}
+
+.intro-btn-replay:hover svg {
+  transform: rotate(-180deg);
+}
+
+.intro-btn-enter {
+  padding: 8px 20px;
+  background: linear-gradient(135deg, #00D2FF 0%, #0284C7 50%, #7C3AED 100%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #FFFFFF;
+  box-shadow: 0 4px 16px rgba(0, 180, 216, 0.30);
+}
+
+.intro-btn-enter:hover {
+  transform: translateY(-1.5px);
+  box-shadow: 0 8px 24px rgba(0, 180, 216, 0.45), 0 0 16px rgba(124, 58, 237, 0.35);
+  filter: brightness(1.05);
+}
+
+.intro-btn-enter svg {
+  transition: transform 0.25s ease;
+}
+
+.intro-btn-enter:hover svg {
+  transform: translateX(3px);
+}
+
+@media (max-width: 640px) {
+  .intro-brandmark-svg {
+    width: 120px;
+    height: 98px;
+  }
+  .intro-wordmark-title {
+    font-size: 2.1rem;
+    letter-spacing: 0.16em;
+  }
+  .intro-wordmark-sub {
+    font-size: 11px;
+    letter-spacing: 0.28em;
+  }
+  .intro-ambient-glow {
+    width: 320px;
+    height: 320px;
+  }
+  .intro-controls-bar {
+    margin-top: 26px;
+  }
+}

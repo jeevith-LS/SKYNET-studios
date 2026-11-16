@@ -3571,9 +3571,547 @@ body.admin-mode .admin-session-badge {
   }
 }
 
+/* ==========================================================================
+   SKYNET STUDIOS // FULL-SCREEN ANIMATED SVG INTRO SPLASH SCREEN
+   Theme: Crisp Light Radial Backdrop & 4-Stage Geometric Reveal
+   ========================================================================== */
+
+body.intro-active {
+  overflow: hidden !important;
+  height: 100vh !important;
+}
+
+.skynet-intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, #FFFFFF 0%, #F8FAFC 55%, #F1F5F9 100%);
+  user-select: none;
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.skynet-intro-overlay.intro-dismissed {
+  opacity: 0 !important;
+  transform: scale(1.04) !important;
+  pointer-events: none !important;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.skynet-intro-overlay.intro-hidden {
+  display: none !important;
+}
+
+/* Ambient Radial Light Glow Behind Logo */
+.intro-ambient-glow {
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 210, 255, 0.16) 0%, rgba(123, 44, 191, 0.10) 45%, rgba(255, 255, 255, 0) 72%);
+  pointer-events: none;
+  filter: blur(45px);
+  transform: translate(-50%, -50%);
+  top: 46%;
+  left: 50%;
+  z-index: 0;
+  opacity: 0.9;
+  transition: opacity 0.6s ease;
+}
+
+.intro-content-container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  max-width: 92vw;
+}
+
+.intro-logo-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.intro-emblem-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  filter: drop-shadow(0 12px 28px rgba(0, 180, 216, 0.14));
+}
+
+.intro-brandmark-svg {
+  display: block;
+  width: 150px;
+  height: 122px;
+  overflow: visible;
+}
+
+/* --------------------------------------------------------------------------
+   STAGE 1 (0.0s – 0.9s) — Geometric Spire Base Reveal
+   Outer geometric spires rising vertically from baseline with sharp cubic-bezier
+   -------------------------------------------------------------------------- */
+.intro-spires-stage1 {
+  clip-path: inset(100% 0 0 0);
+  will-change: clip-path;
+}
+
+.skynet-intro-overlay.animating .intro-spires-stage1 {
+  animation: introSpireRise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.05s forwards;
+}
+
+@keyframes introSpireRise {
+  0% {
+    clip-path: inset(100% 0 0 0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   STAGE 2 (0.8s – 1.5s) — Center Needle Spire & Horizon Arch Sweep
+   -------------------------------------------------------------------------- */
+.intro-center-needle-stage2 {
+  clip-path: inset(100% 0 0 0);
+  will-change: clip-path, transform;
+}
+
+.skynet-intro-overlay.animating .intro-center-needle-stage2 {
+  animation: introCenterNeedleRise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.8s forwards;
+}
+
+@keyframes introCenterNeedleRise {
+  0% {
+    clip-path: inset(100% 0 0 0);
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.intro-horizon-arch-stage2 {
+  clip-path: inset(0 100% 0 0);
+  will-change: clip-path;
+}
+
+.skynet-intro-overlay.animating .intro-horizon-arch-stage2 {
+  animation: introArchSweep 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.85s forwards;
+}
+
+@keyframes introArchSweep {
+  0% {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   STAGE 3 (1.5s – 2.5s) — Letter-by-Letter Staggered Wordmark Reveal
+   Each letter slides up 14px, fading from 0 to 1 with 120ms sequential stagger
+   -------------------------------------------------------------------------- */
+.intro-wordmark-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.intro-wordmark-title {
+  margin: 0;
+  font-family: var(--font-display, 'Orbitron', 'Space Grotesk', sans-serif);
+  font-size: clamp(2.3rem, 6vw, 3.4rem);
+  font-weight: 900;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: #0F172A;
+  background: linear-gradient(180deg, #0F172A 0%, #1E293B 55%, #334155 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.intro-char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(14px);
+  will-change: transform, opacity, filter;
+}
+
+.skynet-intro-overlay.animating .intro-char {
+  animation: introLetterSlideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.skynet-intro-overlay.animating .intro-char[data-char="0"] { animation-delay: 1.50s; }
+.skynet-intro-overlay.animating .intro-char[data-char="1"] { animation-delay: 1.62s; }
+.skynet-intro-overlay.animating .intro-char[data-char="2"] { animation-delay: 1.74s; }
+.skynet-intro-overlay.animating .intro-char[data-char="3"] { animation-delay: 1.86s; }
+.skynet-intro-overlay.animating .intro-char[data-char="4"] { animation-delay: 1.98s; }
+.skynet-intro-overlay.animating .intro-char[data-char="5"] { animation-delay: 2.10s; }
+
+@keyframes introLetterSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0px);
+  }
+}
+
+.intro-wordmark-sub {
+  margin-top: 8px;
+  font-family: 'Space Grotesk', 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: #0284C7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(8px);
+  will-change: transform, opacity;
+}
+
+.skynet-intro-overlay.animating .intro-wordmark-sub {
+  animation: introSubSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 2.25s forwards;
+}
+
+@keyframes introSubSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+    letter-spacing: 0.52em;
+  }
+  100% {
+    opacity: 0.9;
+    transform: translateY(0);
+    letter-spacing: 0.36em;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   STAGE 4 (2.6s – 3.2s) — Shimmer Pulse & Smooth Page Entry
+   -------------------------------------------------------------------------- */
+.intro-shimmer-sweep {
+  position: absolute;
+  top: -25px;
+  left: -40px;
+  right: -40px;
+  bottom: -25px;
+  background: linear-gradient(110deg, transparent 25%, rgba(0, 210, 255, 0.25) 42%, rgba(255, 255, 255, 0.95) 50%, rgba(124, 58, 237, 0.28) 58%, transparent 75%);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-180%) skewX(-25deg);
+  will-change: transform, opacity;
+}
+
+.skynet-intro-overlay.animating .intro-shimmer-sweep {
+  animation: introShimmerPulse 0.75s ease-in-out 2.6s forwards;
+}
+
+@keyframes introShimmerPulse {
+  0% {
+    opacity: 0;
+    transform: translateX(-180%) skewX(-25deg);
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(180%) skewX(-25deg);
+  }
+}
+
+.skynet-intro-overlay.animating .intro-emblem-wrap {
+  animation: introEmblemGlowPulse 0.65s ease-in-out 2.6s forwards;
+}
+
+@keyframes introEmblemGlowPulse {
+  0% {
+    filter: drop-shadow(0 12px 28px rgba(0, 180, 216, 0.14));
+  }
+  45% {
+    filter: drop-shadow(0 0 28px rgba(0, 210, 255, 0.55)) drop-shadow(0 0 46px rgba(124, 58, 237, 0.40));
+    transform: scale(1.025);
+  }
+  100% {
+    filter: drop-shadow(0 12px 28px rgba(0, 180, 216, 0.18));
+    transform: scale(1);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Interactive Controls Bar (Fades in right as wordmark completes ~2.35s)
+   -------------------------------------------------------------------------- */
+.intro-controls-bar {
+  margin-top: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  opacity: 0;
+  transform: translateY(12px);
+  will-change: opacity, transform;
+}
+
+.skynet-intro-overlay.animating .intro-controls-bar {
+  animation: introControlsFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 2.35s forwards;
+}
+
+@keyframes introControlsFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.intro-btn-replay,
+.intro-btn-enter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+}
+
+.intro-btn-replay {
+  padding: 8px 18px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(203, 213, 225, 0.9);
+  color: #475569;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(8px);
+}
+
+.intro-btn-replay:hover {
+  background: #FFFFFF;
+  color: #0284C7;
+  border-color: rgba(2, 132, 199, 0.45);
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 16px rgba(0, 180, 216, 0.15);
+}
+
+.intro-btn-replay svg {
+  transition: transform 0.4s ease;
+}
+
+.intro-btn-replay:hover svg {
+  transform: rotate(-180deg);
+}
+
+.intro-btn-enter {
+  padding: 8px 20px;
+  background: linear-gradient(135deg, #00D2FF 0%, #0284C7 50%, #7C3AED 100%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #FFFFFF;
+  box-shadow: 0 4px 16px rgba(0, 180, 216, 0.30);
+}
+
+.intro-btn-enter:hover {
+  transform: translateY(-1.5px);
+  box-shadow: 0 8px 24px rgba(0, 180, 216, 0.45), 0 0 16px rgba(124, 58, 237, 0.35);
+  filter: brightness(1.05);
+}
+
+.intro-btn-enter svg {
+  transition: transform 0.25s ease;
+}
+
+.intro-btn-enter:hover svg {
+  transform: translateX(3px);
+}
+
+@media (max-width: 640px) {
+  .intro-brandmark-svg {
+    width: 120px;
+    height: 98px;
+  }
+  .intro-wordmark-title {
+    font-size: 2.1rem;
+    letter-spacing: 0.16em;
+  }
+  .intro-wordmark-sub {
+    font-size: 11px;
+    letter-spacing: 0.28em;
+  }
+  .intro-ambient-glow {
+    width: 320px;
+    height: 320px;
+  }
+  .intro-controls-bar {
+    margin-top: 26px;
+  }
+}
+
 </style>
 </head>
-<body class="light-theme">
+<body class="light-theme intro-active">
+
+  <!-- =========================================================================
+       SKYNET STUDIOS // FULL-SCREEN ANIMATED SVG INTRO SPLASH SCREEN
+       ========================================================================= -->
+  <div id="skynet-intro-loader" class="skynet-intro-overlay animating" role="dialog" aria-modal="true" aria-label="Skynet Studios Introduction">
+    <!-- Ambient Radial Light Glow Behind Logo -->
+    <div class="intro-ambient-glow" aria-hidden="true"></div>
+
+    <div class="intro-content-container">
+      <div class="intro-logo-stage">
+        
+        <!-- Animated SVG Emblem -->
+        <div class="intro-emblem-wrap">
+          <svg width="150" height="122" viewBox="0 0 54 44" fill="none" xmlns="http://www.w3.org/2000/svg" class="intro-brandmark-svg" aria-hidden="true">
+            <defs>
+              <!-- Vivid Electric Cyan to Royal Blue Gradient (Left Facets) -->
+              <linearGradient id="introSpireCyanBlue" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#00D2FF"/>
+                <stop offset="45%" stop-color="#0284C7"/>
+                <stop offset="100%" stop-color="#2563EB"/>
+              </linearGradient>
+              <!-- Vivid Indigo to Rich Violet Gradient (Right Facets) -->
+              <linearGradient id="introSpireViolet" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#6366F1"/>
+                <stop offset="60%" stop-color="#7C3AED"/>
+                <stop offset="100%" stop-color="#9333EA"/>
+              </linearGradient>
+              <!-- Sweeping Curved Horizon Arch Gradient -->
+              <linearGradient id="introArchGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#00D2FF"/>
+                <stop offset="30%" stop-color="#0284C7"/>
+                <stop offset="70%" stop-color="#6366F1"/>
+                <stop offset="100%" stop-color="#9333EA"/>
+              </linearGradient>
+            </defs>
+
+            <!-- STAGE 1 (0.0s – 0.9s): Outer Geometric Skyline Spires (Rise from baseline) -->
+            <g class="intro-spires-stage1">
+              <!-- 1. Outer Left Spire -->
+              <polygon points="15,20 12,23 12,30 14,30" fill="url(#introSpireCyanBlue)"/>
+              <polygon points="15,20 14,30 16.5,30 16.5,22" fill="url(#introSpireViolet)"/>
+
+              <!-- 2. Inner Left Spire -->
+              <polygon points="21,13 18,17 18,30 20,30" fill="url(#introSpireCyanBlue)"/>
+              <polygon points="21,13 20,30 22.5,30 22.5,15.5" fill="url(#introSpireViolet)"/>
+
+              <!-- 4. Inner Right Spire -->
+              <polygon points="33,13 31.5,15.5 31.5,30 34,30" fill="url(#introSpireCyanBlue)"/>
+              <polygon points="33,13 34,30 36,30 36,17" fill="url(#introSpireViolet)"/>
+
+              <!-- 5. Outer Right Spire -->
+              <polygon points="39,20 37.5,22 37.5,30 40,30" fill="url(#introSpireCyanBlue)"/>
+              <polygon points="39,20 40,30 42,30 42,23" fill="url(#introSpireViolet)"/>
+            </g>
+
+            <!-- STAGE 2A (0.8s – 1.5s): Center Needle Spire & Apex Tip (Rise & sweep apex to tip) -->
+            <g class="intro-center-needle-stage2">
+              <line x1="27" y1="2" x2="27" y2="8" stroke="#0284C7" stroke-width="1.3" stroke-linecap="round"/>
+              <circle cx="27" cy="2" r="1.3" fill="#00D2FF" stroke="#0284C7" stroke-width="0.5"/>
+              <polygon points="27,7.5 24,12.5 24,30 27,30" fill="url(#introSpireCyanBlue)"/>
+              <polygon points="27,7.5 27,30 30,30 30,12.5" fill="url(#introSpireViolet)"/>
+              <line x1="27" y1="7.5" x2="27" y2="30" stroke="#FFFFFF" stroke-width="0.8" opacity="0.95"/>
+            </g>
+
+            <!-- STAGE 2B (0.85s – 1.5s): Curved Planetary Horizon Arch (Left to right sweep) -->
+            <g class="intro-horizon-arch-stage2">
+              <path d="M 6 34.5 Q 27 28 48 34.5 Q 27 30.5 6 34.5 Z" fill="url(#introArchGrad)"/>
+              <path d="M 11 33.6 Q 27 28.5 43 33.6" stroke="#FFFFFF" stroke-width="0.9" stroke-linecap="round" opacity="0.95"/>
+            </g>
+          </svg>
+
+          <!-- STAGE 4 (2.6s – 3.2s): Bright Radial Light Shimmer Pulse -->
+          <div class="intro-shimmer-sweep" aria-hidden="true"></div>
+        </div>
+
+        <!-- STAGE 3 (1.5s – 2.5s): Letter-by-Letter Staggered Wordmark Reveal -->
+        <div class="intro-wordmark-wrap">
+          <h1 class="intro-wordmark-title" aria-label="SKYNET">
+            <span class="intro-char" data-char="0">S</span>
+            <span class="intro-char" data-char="1">K</span>
+            <span class="intro-char" data-char="2">Y</span>
+            <span class="intro-char" data-char="3">N</span>
+            <span class="intro-char" data-char="4">E</span>
+            <span class="intro-char" data-char="5">T</span>
+          </h1>
+          <div class="intro-wordmark-sub">
+            <span class="sub-dash">—</span>
+            <span class="sub-text">STUDIOS</span>
+            <span class="sub-dash">—</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Interactive Controls Bar (Fades in right after wordmark ~2.35s) -->
+      <div class="intro-controls-bar">
+        <button type="button" class="intro-btn-replay" id="introReplayBtn" title="Replay intro animation">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+          </svg>
+          <span>Replay</span>
+        </button>
+        <button type="button" class="intro-btn-enter" id="introEnterBtn" title="Enter Skynet Studios">
+          <span>Enter Studio</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
 
   <!-- Base Layer: Interactive Multicolored Aurora Canvas -->
   <canvas id="auroraCanvas" class="aurora-canvas" aria-hidden="true"></canvas>
@@ -4755,6 +5293,112 @@ body.admin-mode .admin-session-badge {
 
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
+
+  // =========================================================================
+  // 0. FULL-SCREEN ANIMATED SVG INTRO SPLASH SCREEN ENGINE
+  // Staged geometric reveal:
+  // Stage 1 (0.0s – 0.9s): Spire Base Reveal (clip-path rising vertically)
+  // Stage 2 (0.8s – 1.5s): Center Needle Spire & Horizon Arch Sweep (left to right)
+  // Stage 3 (1.5s – 2.5s): Letter-by-Letter Staggered Wordmark ("SKYNET" + "— STUDIOS —")
+  // Stage 4 (2.6s – 3.2s): Bright Radial Light Shimmer Pulse & Page Reveal
+  // =========================================================================
+  const introLoader = document.getElementById('skynet-intro-loader');
+  const introReplayBtn = document.getElementById('introReplayBtn');
+  const introEnterBtn = document.getElementById('introEnterBtn');
+  const brandLogo = document.getElementById('brandLogo');
+
+  let introAutoDismissTimer = null;
+  let isIntroDismissed = false;
+
+  function dismissSkynetIntro() {
+    if (isIntroDismissed) return;
+    isIntroDismissed = true;
+    if (introAutoDismissTimer) {
+      clearTimeout(introAutoDismissTimer);
+      introAutoDismissTimer = null;
+    }
+
+    if (introLoader) {
+      introLoader.classList.add('intro-dismissed');
+      document.body.classList.remove('intro-active');
+      document.body.style.overflow = '';
+
+      setTimeout(() => {
+        introLoader.classList.add('intro-hidden');
+      }, 650);
+    }
+  }
+
+  function replaySkynetIntro() {
+    if (!introLoader) return;
+    if (introAutoDismissTimer) {
+      clearTimeout(introAutoDismissTimer);
+      introAutoDismissTimer = null;
+    }
+
+    isIntroDismissed = false;
+    document.body.classList.add('intro-active');
+    document.body.style.overflow = 'hidden';
+
+    introLoader.classList.remove('intro-hidden', 'intro-dismissed');
+    introLoader.classList.remove('animating');
+
+    // Force DOM reflow to restart CSS keyframe animations from 0.0s
+    void introLoader.offsetWidth;
+
+    introLoader.classList.add('animating');
+
+    // Auto-transition into main studio after ~3.5s if untouched (~1.2s post-wordmark)
+    introAutoDismissTimer = setTimeout(() => {
+      dismissSkynetIntro();
+    }, 3500);
+  }
+
+  // Interactive Controls (Zero inline JS / strict CSP compliant)
+  if (introEnterBtn) {
+    introEnterBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      dismissSkynetIntro();
+    });
+  }
+
+  if (introReplayBtn) {
+    introReplayBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      replaySkynetIntro();
+    });
+  }
+
+  // Accessibility: Escape key skips intro immediately
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !isIntroDismissed) {
+      dismissSkynetIntro();
+    }
+  });
+
+  // Replay anytime when clicking top navbar brand logo
+  if (brandLogo) {
+    brandLogo.addEventListener('click', (e) => {
+      if (window.scrollY < 100) {
+        e.preventDefault();
+        replaySkynetIntro();
+      }
+    });
+  }
+
+  // Start initial auto-dismiss timer (~3.5s total duration)
+  if (introLoader) {
+    document.body.classList.add('intro-active');
+    introAutoDismissTimer = setTimeout(() => {
+      dismissSkynetIntro();
+    }, 3500);
+  }
+
+  // Global handle for programmatic replay or debugging
+  window.skynetIntro = {
+    replay: replaySkynetIntro,
+    dismiss: dismissSkynetIntro
+  };
 
   // =========================================================================
   // 1. SPOTLIGHT EFFECT ON CARDS (Mouse-Tracking Radial Illumination)

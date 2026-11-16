@@ -11,6 +11,112 @@ document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
   // =========================================================================
+  // 0. FULL-SCREEN ANIMATED SVG INTRO SPLASH SCREEN ENGINE
+  // Staged geometric reveal:
+  // Stage 1 (0.0s – 0.9s): Spire Base Reveal (clip-path rising vertically)
+  // Stage 2 (0.8s – 1.5s): Center Needle Spire & Horizon Arch Sweep (left to right)
+  // Stage 3 (1.5s – 2.5s): Letter-by-Letter Staggered Wordmark ("SKYNET" + "— STUDIOS —")
+  // Stage 4 (2.6s – 3.2s): Bright Radial Light Shimmer Pulse & Page Reveal
+  // =========================================================================
+  const introLoader = document.getElementById('skynet-intro-loader');
+  const introReplayBtn = document.getElementById('introReplayBtn');
+  const introEnterBtn = document.getElementById('introEnterBtn');
+  const brandLogo = document.getElementById('brandLogo');
+
+  let introAutoDismissTimer = null;
+  let isIntroDismissed = false;
+
+  function dismissSkynetIntro() {
+    if (isIntroDismissed) return;
+    isIntroDismissed = true;
+    if (introAutoDismissTimer) {
+      clearTimeout(introAutoDismissTimer);
+      introAutoDismissTimer = null;
+    }
+
+    if (introLoader) {
+      introLoader.classList.add('intro-dismissed');
+      document.body.classList.remove('intro-active');
+      document.body.style.overflow = '';
+
+      setTimeout(() => {
+        introLoader.classList.add('intro-hidden');
+      }, 650);
+    }
+  }
+
+  function replaySkynetIntro() {
+    if (!introLoader) return;
+    if (introAutoDismissTimer) {
+      clearTimeout(introAutoDismissTimer);
+      introAutoDismissTimer = null;
+    }
+
+    isIntroDismissed = false;
+    document.body.classList.add('intro-active');
+    document.body.style.overflow = 'hidden';
+
+    introLoader.classList.remove('intro-hidden', 'intro-dismissed');
+    introLoader.classList.remove('animating');
+
+    // Force DOM reflow to restart CSS keyframe animations from 0.0s
+    void introLoader.offsetWidth;
+
+    introLoader.classList.add('animating');
+
+    // Auto-transition into main studio after ~3.5s if untouched (~1.2s post-wordmark)
+    introAutoDismissTimer = setTimeout(() => {
+      dismissSkynetIntro();
+    }, 3500);
+  }
+
+  // Interactive Controls (Zero inline JS / strict CSP compliant)
+  if (introEnterBtn) {
+    introEnterBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      dismissSkynetIntro();
+    });
+  }
+
+  if (introReplayBtn) {
+    introReplayBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      replaySkynetIntro();
+    });
+  }
+
+  // Accessibility: Escape key skips intro immediately
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !isIntroDismissed) {
+      dismissSkynetIntro();
+    }
+  });
+
+  // Replay anytime when clicking top navbar brand logo
+  if (brandLogo) {
+    brandLogo.addEventListener('click', (e) => {
+      if (window.scrollY < 100) {
+        e.preventDefault();
+        replaySkynetIntro();
+      }
+    });
+  }
+
+  // Start initial auto-dismiss timer (~3.5s total duration)
+  if (introLoader) {
+    document.body.classList.add('intro-active');
+    introAutoDismissTimer = setTimeout(() => {
+      dismissSkynetIntro();
+    }, 3500);
+  }
+
+  // Global handle for programmatic replay or debugging
+  window.skynetIntro = {
+    replay: replaySkynetIntro,
+    dismiss: dismissSkynetIntro
+  };
+
+  // =========================================================================
   // 1. SPOTLIGHT EFFECT ON CARDS (Mouse-Tracking Radial Illumination)
   // =========================================================================
   const spotlightCards = document.querySelectorAll('.spotlight-card');
